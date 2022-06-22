@@ -1,0 +1,6 @@
+__pycache__
+.qt_for_python
+.vscode
+~*
+build
+dist_*
