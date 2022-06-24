@@ -1,6 +1,13 @@
-__pycache__
+*pycache*
+~*
+
 .qt_for_python
 .vscode
-~*
+
 build
-dist_*
+*dist*
+
+*.npy
+*_tmp
+
+*.pdf

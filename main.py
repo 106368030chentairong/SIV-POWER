@@ -121,7 +121,6 @@ def get_rawdata_2(channel, visa_address ,SCALE=(0.05)):
     with open("ch"+channel+".txt", "wb") as fp:   #Pickling
         pickle.dump(CLK_scaled_wave, fp)
 
-
     return CLK_scaled_wave, scaled_time
 
 #rm = visa.ResourceManager()
