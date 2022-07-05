@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1400</width>
+    <height>768</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>AutoTrig V0.0.1</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>150</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Systea Log</string>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_10">
+       <item row="0" column="0">
+        <widget class="QTextEdit" name="textEdit">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>150</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="tabWidget_3">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Measure Tool</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="0" column="0">
+         <widget class="QWidget" name="widget" native="true">
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="1">
+            <widget class="QTabWidget" name="tabWidget">
+             <property name="currentIndex">
+              <number>1</number>
+             </property>
+             <widget class="QWidget" name="tab_9">
+              <attribute name="title">
+               <string>Measurement Details</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout">
+               <item row="0" column="0">
+                <widget class="QTableWidget" name="tableWidget_Measure"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="tab">
+              <attribute name="title">
+               <string>Test Plan</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_5">
+               <item row="0" column="0">
+                <widget class="QTableWidget" name="tableWidget">
+                 <property name="editTriggers">
+                  <set>QAbstractItemView::NoEditTriggers</set>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="tab_2">
+              <attribute name="title">
+               <string>Screenshot</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_6">
+               <item row="0" column="0">
+                <widget class="QLabel" name="imagelabel">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QTabWidget" name="tabWidget_2">
+             <property name="maximumSize">
+              <size>
+               <width>500</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="tab_5">
+              <attribute name="title">
+               <string>Auto</string>
+              </attribute>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <layout class="QVBoxLayout" name="verticalLayout_4">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+                 </item>
+                 <item>
+                  <layout class="QGridLayout" name="gridLayout_3">
+                   <item row="2" column="1">
+                    <widget class="QComboBox" name="comboBox_sheet">
+                     <property name="enabled">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="2">
+                    <widget class="QPushButton" name="pushButton_testplan">
+                     <property name="maximumSize">
+                      <size>
+                       <width>80</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Open</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QLabel" name="label_2">
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Testplan Path：</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <widget class="QLineEdit" name="lineEdit_testplan"/>
+                   </item>
+                   <item row="3" column="2">
+                    <widget class="QPushButton" name="pushButton_template">
+                     <property name="maximumSize">
+                      <size>
+                       <width>80</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Open</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="1">
+                    <widget class="QLineEdit" name="lineEdit_template"/>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label">
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <pointsize>9</pointsize>
+                       <weight>50</weight>
+                       <bold>false</bold>
+                      </font>
+                     </property>
+                     <property name="text">
+                      <string>VISA Address：</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="QComboBox" name="comboBox_visa"/>
+                   </item>
+                   <item row="0" column="2">
+                    <widget class="QPushButton" name="pushButton_refresh">
+                     <property name="maximumSize">
+                      <size>
+                       <width>80</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Refresh</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QLabel" name="label_3">
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Template Path：</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <layout class="QVBoxLayout" name="verticalLayout">
+                   <item>
+                    <widget class="QCheckBox" name="checkBox">
+                     <property name="text">
+                      <string>Generate report</string>
+                     </property>
+                     <property name="checked">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QProgressBar" name="progressBar">
+                     <property name="value">
+                      <number>0</number>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
+                     </property>
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="format">
+                      <string>%p%</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <layout class="QHBoxLayout" name="horizontalLayout">
+                     <item>
+                      <widget class="QPushButton" name="pushButton_16">
+                       <property name="text">
+                        <string>RUN</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QPushButton" name="pushButton_Cancel">
+                       <property name="text">
+                        <string>CANCEL</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Upload Tool</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_8">
+        <item row="1" column="0">
+         <widget class="QProgressBar" name="progressBar_upload">
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QTableWidget" name="tableWidget_upload"/>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="pushButton_upload">
+          <property name="text">
+           <string>Upload</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <action name="actionExport_Table">
+   <property name="text">
+    <string>Export Table</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
