@@ -1,4 +1,3 @@
-from cmath import e
 import time
 import pyvisa as visa
 
@@ -21,9 +20,11 @@ class DPO4000_visa():
                 self.break_num +=1
                 time.sleep(5)
                 #logging.info("Reconnect Waiting 5s ...")
+                print("Reconnect Waiting 5s ...")
                 self.connect()
             else:
                 #logging.error(self.VISA_ADDRESS + " - Oscilloscope Connect Error !")
+                print(self.VISA_ADDRESS + " - Oscilloscope Connect Error !")
                 pass
 
     def do_command(self, command):
@@ -38,7 +39,7 @@ class DPO4000_visa():
             return self.KsInfiniiumScope.query("%s" % command).strip()
         except Exception: 
             try:
-                logging.error(command + " - Query Command Error !")
+                print(command + " - Query Command Error !")
             except NameError:
                 print(command + " - Query Command Error !")
             pass
@@ -46,6 +47,12 @@ class DPO4000_visa():
     def get_raw(self):
         try:
             self.do_command('CURVE?')
+            return self.KsInfiniiumScope.read_raw()
+        except Exception: 
+            pass
+    
+    def read_raw(self):
+        try:
             return self.KsInfiniiumScope.read_raw()
         except Exception: 
             pass

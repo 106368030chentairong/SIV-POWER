@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1400</width>
-    <height>768</height>
+    <width>1505</width>
+    <height>815</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,7 +28,7 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_10">
        <item row="0" column="0">
-        <widget class="QTextEdit" name="textEdit">
+        <widget class="QTextEdit" name="textEdit_logbox">
          <property name="maximumSize">
           <size>
            <width>16777215</width>
@@ -41,11 +41,11 @@
      </widget>
     </item>
     <item row="0" column="0">
-     <widget class="QTabWidget" name="tabWidget_3">
+     <widget class="QTabWidget" name="tabWidget_main">
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab_3">
+      <widget class="QWidget" name="tab_measue">
        <attribute name="title">
         <string>Measure Tool</string>
        </attribute>
@@ -54,7 +54,7 @@
          <widget class="QWidget" name="widget" native="true">
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="0" column="1">
-            <widget class="QTabWidget" name="tabWidget">
+            <widget class="QTabWidget" name="tabWidget_detailed">
              <property name="currentIndex">
               <number>1</number>
              </property>
@@ -74,7 +74,7 @@
               </attribute>
               <layout class="QGridLayout" name="gridLayout_5">
                <item row="0" column="0">
-                <widget class="QTableWidget" name="tableWidget">
+                <widget class="QTableWidget" name="tableWidget_testplan">
                  <property name="editTriggers">
                   <set>QAbstractItemView::NoEditTriggers</set>
                  </property>
@@ -99,7 +99,7 @@
             </widget>
            </item>
            <item row="0" column="0">
-            <widget class="QTabWidget" name="tabWidget_2">
+            <widget class="QTabWidget" name="tabWidget_autotest">
              <property name="maximumSize">
               <size>
                <width>500</width>
@@ -111,118 +111,209 @@
              </property>
              <widget class="QWidget" name="tab_5">
               <attribute name="title">
-               <string>Auto</string>
+               <string>AutoTest</string>
               </attribute>
               <layout class="QHBoxLayout" name="horizontalLayout_6">
                <item>
                 <layout class="QVBoxLayout" name="verticalLayout_4">
                  <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+                  <widget class="QGroupBox" name="groupBox_2">
+                   <property name="title">
+                    <string>VISA ADDRESS</string>
+                   </property>
+                   <layout class="QVBoxLayout" name="verticalLayout_2">
+                    <item>
+                     <layout class="QGridLayout" name="gridLayout_11">
+                      <item row="2" column="0">
+                       <widget class="QLabel" name="label_EL_visa">
+                        <property name="maximumSize">
+                         <size>
+                          <width>100</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>9</pointsize>
+                          <weight>50</weight>
+                          <bold>false</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Electronic Load：</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="1">
+                       <widget class="QComboBox" name="comboBox_TK_visa"/>
+                      </item>
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label_TK_visa">
+                        <property name="maximumSize">
+                         <size>
+                          <width>100</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>9</pointsize>
+                          <weight>50</weight>
+                          <bold>false</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Tektronix 4000：</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="0">
+                       <widget class="QLabel" name="label_PS_visa">
+                        <property name="maximumSize">
+                         <size>
+                          <width>100</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <pointsize>9</pointsize>
+                          <weight>50</weight>
+                          <bold>false</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>Power Supply：</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="2">
+                       <widget class="QPushButton" name="pushButton_TK_visa">
+                        <property name="maximumSize">
+                         <size>
+                          <width>80</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Refresh</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="2">
+                       <widget class="QPushButton" name="pushButton_PS_visa">
+                        <property name="maximumSize">
+                         <size>
+                          <width>80</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Refresh</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="QComboBox" name="comboBox_PS_visa"/>
+                      </item>
+                      <item row="2" column="1">
+                       <widget class="QComboBox" name="comboBox_EL_visa"/>
+                      </item>
+                      <item row="2" column="2">
+                       <widget class="QPushButton" name="pushButton_EL_visa">
+                        <property name="maximumSize">
+                         <size>
+                          <width>80</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Refresh</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
                  </item>
                  <item>
-                  <layout class="QGridLayout" name="gridLayout_3">
-                   <item row="2" column="1">
-                    <widget class="QComboBox" name="comboBox_sheet">
-                     <property name="enabled">
-                      <bool>true</bool>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="2">
-                    <widget class="QPushButton" name="pushButton_testplan">
-                     <property name="maximumSize">
-                      <size>
-                       <width>80</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>Open</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_2">
-                     <property name="maximumSize">
-                      <size>
-                       <width>100</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>Testplan Path：</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QLineEdit" name="lineEdit_testplan"/>
-                   </item>
-                   <item row="3" column="2">
-                    <widget class="QPushButton" name="pushButton_template">
-                     <property name="maximumSize">
-                      <size>
-                       <width>80</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>Open</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="1">
-                    <widget class="QLineEdit" name="lineEdit_template"/>
-                   </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label">
-                     <property name="maximumSize">
-                      <size>
-                       <width>100</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>9</pointsize>
-                       <weight>50</weight>
-                       <bold>false</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>VISA Address：</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QComboBox" name="comboBox_visa"/>
-                   </item>
-                   <item row="0" column="2">
-                    <widget class="QPushButton" name="pushButton_refresh">
-                     <property name="maximumSize">
-                      <size>
-                       <width>80</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>Refresh</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="0">
-                    <widget class="QLabel" name="label_3">
-                     <property name="maximumSize">
-                      <size>
-                       <width>100</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>Template Path：</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
+                  <widget class="QGroupBox" name="groupBox_3">
+                   <property name="title">
+                    <string>FILE PATH</string>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_14">
+                    <item row="0" column="0">
+                     <layout class="QGridLayout" name="gridLayout_13">
+                      <item row="0" column="1">
+                       <widget class="QLineEdit" name="lineEdit_testplan"/>
+                      </item>
+                      <item row="0" column="2">
+                       <widget class="QPushButton" name="pushButton_testplan">
+                        <property name="maximumSize">
+                         <size>
+                          <width>80</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Open</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="1" column="1">
+                       <widget class="QComboBox" name="comboBox_testplan">
+                        <property name="enabled">
+                         <bool>true</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="0" column="0">
+                       <widget class="QLabel" name="label_testplan">
+                        <property name="maximumSize">
+                         <size>
+                          <width>100</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Testplan：</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="1">
+                       <widget class="QLineEdit" name="lineEdit_template"/>
+                      </item>
+                      <item row="2" column="0">
+                       <widget class="QLabel" name="label_template">
+                        <property name="maximumSize">
+                         <size>
+                          <width>100</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Template：</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="2">
+                       <widget class="QPushButton" name="pushButton_template">
+                        <property name="maximumSize">
+                         <size>
+                          <width>80</width>
+                          <height>16777215</height>
+                         </size>
+                        </property>
+                        <property name="text">
+                         <string>Open</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                   </layout>
+                  </widget>
                  </item>
                  <item>
                   <spacer name="verticalSpacer">
@@ -240,7 +331,7 @@
                  <item>
                   <layout class="QVBoxLayout" name="verticalLayout">
                    <item>
-                    <widget class="QCheckBox" name="checkBox">
+                    <widget class="QCheckBox" name="checkBox_generate_report">
                      <property name="text">
                       <string>Generate report</string>
                      </property>
@@ -250,7 +341,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QProgressBar" name="progressBar">
+                    <widget class="QProgressBar" name="progressBar_autotest">
                      <property name="value">
                       <number>0</number>
                      </property>
@@ -268,7 +359,7 @@
                    <item>
                     <layout class="QHBoxLayout" name="horizontalLayout">
                      <item>
-                      <widget class="QPushButton" name="pushButton_16">
+                      <widget class="QPushButton" name="pushButton_RUN">
                        <property name="text">
                         <string>RUN</string>
                        </property>
@@ -296,7 +387,7 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tab_4">
+      <widget class="QWidget" name="tab_upload">
        <attribute name="title">
         <string>Upload Tool</string>
        </attribute>
