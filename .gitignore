@@ -11,3 +11,6 @@ build
 *_tmp
 
 *.pdf
+
+Measurement data/
+image/
