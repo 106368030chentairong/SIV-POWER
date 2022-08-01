@@ -26,8 +26,13 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.wb = None
         self.continue_single = 0
 
+        self.temperature = ["-20", "25", "50"]
+        self.temperature_index_list = {"-20":0, "25":1, "50":2}
+        self.temperature_index = 0
         self.test_item = ["Regulation", "Load","Line","Eff",]
         self.switch_index = 0
+
+        self.set_comboBox_sheet(self.comboBox_temp, self.temperature)
 
         # Push Button
         # VISA ADDRESS REFRESH FUNCTION
@@ -57,11 +62,12 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.timestamp = str(time.strftime("%Y%m%d%H%M%S", struct_time))
 
     def btn_run(self):
-        self.setup_timestamp()
-        self.check_folder()
+        self.temperature_index = self.temperature_index_list[self.comboBox_temp.currentText()]
+        if self.temperature_index == 0:
+            self.setup_timestamp()
+            self.check_folder()
         self.switch_index = 0
         self.load_excel(self.test_item[0])
-
         self.autotest()
     
     def autotest(self):
@@ -72,16 +78,17 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread.LD_VISA_ADDRESS = self.comboBox_EL_visa.currentText()
         self.thread.excel_data = self.excel_data
         self.thread.timestamp = self.timestamp
+        self.thread.temperature_index = self.temperature_index
         self.thread._respones.connect(self.respones2table)
         self.thread._stop_signal.connect(self.switch_table)
         self.thread.start()
     
     def table2excel(self):
-        if self.switch_index == 0:
+        if self.switch_index == 0 and self.temperature_index == 0:
             wb_data = load_workbook(self.lineEdit_testplan.text(), data_only=True)
             basicsheet = wb_data.copy_worksheet(wb_data["Basic"])
             basicsheet.title = "Testing"
-        elif self.switch_index > 0:
+        elif self.switch_index > 0 or self.temperature_index <= 3:
             wb_data = load_workbook("Measurement data/"+self.timestamp+"/testingdata_"+self.timestamp+".xlsx", data_only=True)
             basicsheet = wb_data["Testing"]
 
@@ -95,12 +102,14 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         print(col,row)
         
         for row_index in range(row):
-            sheet_con += 1
-            #print(sheet_con)
-            logging.debug(str(self.tableWidget_testplan.item(row_index, 0).text()))
-            for col_index in range(col):
-                teext = str(self.tableWidget_testplan.item(row_index, col_index).text())
-                basicsheet.cell(row=sheet_con+2, column=col_index+index_dic[type_name]).value = teext
+            if row_index > 0:
+                sheet_con += 1
+
+                #print(sheet_con)
+                logging.debug(str(self.tableWidget_testplan.item(row_index, 0).text()))
+                for col_index in range(col):
+                    teext = str(self.tableWidget_testplan.item(row_index, col_index).text())
+                    basicsheet.cell(row=((row-1)*self.temperature_index)+(sheet_con+3), column=col_index+index_dic[type_name]).value = teext
      
         wb_data.save("Measurement data/"+self.timestamp+"/testingdata_"+self.timestamp+".xlsx")
 
@@ -120,7 +129,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.switch_index < len(self.test_item):
             self.load_excel(self.test_item[self.switch_index])
             self.autotest()
-        if self.switch_index == len(self.test_item) :
+        if self.switch_index == len(self.test_item) and self.temperature_index == 2:
             self.rum_autoreport()
 
     def w2table(self):
@@ -233,6 +242,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
 
         for index, col in enumerate(msg[1]):
             item = QTableWidgetItem(str(col))
+            print(msg[0]-1, index+index_shift)
             self.tableWidget_testplan.setItem(msg[0]-1, index+index_shift , item)
 
 

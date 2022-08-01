@@ -29,7 +29,7 @@ class get_measure_data():
 
         time.sleep(5)
         result_tmp = []
-        for i in range(len(self.MEASUrement_Type)):
+        for i in range(len(self.MEASUrement_Type[:4])):
             value = float(self.scope.do_query('MEASUrement:MEAS'+str(i+1)+':VALue?'))
             result_tmp.append(value)
         

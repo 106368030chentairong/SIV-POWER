@@ -59,8 +59,8 @@ class Auto_trig():
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
         self.scope.connect()
         #self.scope.do_command('FPAnel:PRESS DEFaultsetup')
-        self.scope.do_command('DISplay:INTENSITy:WAVEform 100')
-        self.scope.do_command('DISplay:INTENSITy:GRAticule 50')
+        self.scope.do_command('DISplay:INTENSITy:WAVEform 80')
+        self.scope.do_command('DISplay:INTENSITy:GRAticule 80')
         self.scope.do_command('HORizontal:RECOrdlength '+ str(record_length))
         self.scope.do_command('FPAnel:PRESS MENUOff')
         self.scope.do_command('SELECT:CH1 ON')
@@ -249,8 +249,8 @@ class Auto_trig():
         self.scope.connect()
 
         #self.scope.do_command('FPAnel:PRESS DEFaultsetup')
-        self.scope.do_command('DISplay:INTENSITy:WAVEform 100')
-        self.scope.do_command('DISplay:INTENSITy:GRAticule 50')
+        self.scope.do_command('DISplay:INTENSITy:WAVEform 80')
+        self.scope.do_command('DISplay:INTENSITy:GRAticule 80')
         self.scope.do_command('HORizontal:RECOrdlength 1E+6')
         self.scope.do_command('FPAnel:PRESS MENUOff')
         self.scope.do_command('SELECT:CH1 ON')

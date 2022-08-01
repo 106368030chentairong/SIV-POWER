@@ -17,6 +17,7 @@ class Runthread(QtCore.QThread):
     def __init__(self):
         super(Runthread, self).__init__()
         self.timestamp = None
+        self.temperature_index = None
 
         self.TK_VISA_ADDRESS = None
         self.PW_VISA_ADDRESS = None
@@ -24,6 +25,7 @@ class Runthread(QtCore.QThread):
 
         self.testype = None
         self.excel_data = None
+        self.test_item = {"Regulation":"1", "Load":"2","Line":"3","Eff":"4"}
 
         # Spec
         self.Voltage_1 = None
@@ -42,7 +44,7 @@ class Runthread(QtCore.QThread):
         self.CurrDynH = None
         self.CurrDynL = None
 
-        self.index = None
+        self.image_index = None
 
     def run(self):
 
@@ -50,7 +52,7 @@ class Runthread(QtCore.QThread):
         for index, row in enumerate(self.excel_data):
             # Start in to 2 num row 
             if index >= 2 :
-                self.index = str(index-1)
+                self.image_index = str(index-1)
                 self.setup_rel(row)
                 result = self.auto_control(self.testype)
                 
@@ -133,8 +135,8 @@ class Runthread(QtCore.QThread):
             auto_scope.VISA_ADDRESS = "USB0::0x0699::0x0405::C022392::INSTR"
 
             load_scope = Auto_dc_loding()
-            load_scope.PW_VISA_ADDRESS = "GPIB0::5::INSTR"
-            load_scope.LD_VISA_ADDRESS = "GPIB0::7::INSTR"
+            load_scope.PW_VISA_ADDRESS = self.PW_VISA_ADDRESS
+            load_scope.LD_VISA_ADDRESS = self.LD_VISA_ADDRESS
 
             # setup Hight level
             load_scope.PW_setup(self.Voltage_1)
@@ -146,11 +148,11 @@ class Runthread(QtCore.QThread):
 
             time.sleep(2)
             result_list = load_scope.get_Eff()
+
         if self.testype != "Eff":
             judge = self.judge(result_list)
             result_list.append(judge)
-        
-        auto_scope.get_IMAGe("./Measurement data/"+self.timestamp+"/"+self.index+testype)
+            auto_scope.get_IMAGe("./Measurement data/"+self.timestamp+"/"+ self.test_item[testype] +"_"+ str(self.temperature_index) +"_"+ self.image_index )
 
         return result_list
 

@@ -60,7 +60,27 @@ class Autoreport_Runthread(QtCore.QThread):
         print("Report Path : ./"+self.format_save_name(sheet_data))
         #print(sheet_data)
         self.doc.save("./Measurement data/"+self.timestamp+"/"+self.format_save_name(sheet_data))     
-
+    
+    def IMG2WORD(self):
+        tmp = []
+        image_counter = 0
+        for index_dir, (dirPath, dirNames, fileNames) in enumerate(os.walk("./Measurement data/"+self.timestamp+"/")):
+            #if dirNames != []:
+            #    for index, f in enumerate(fileNames):
+            #        print((dirPath, dirNames, fileNames))
+            #        tmp.append({'image': InlineImage(self.doc, os.path.join(dirPath, f),width=Mm(int(80)))})
+            #    self.context.setdefault(os.path.split(dirPath)[-1], tmp)
+            #    tmp = []
+            #else:
+            for Tag in self.doc.get_undeclared_template_variables():
+                if Tag.split('_')[0] == "image":
+                    try:
+                        f = fileNames[int(Tag.split('_')[-1])]
+                        if f.split(".")[-1] == "png":
+                            self.context.setdefault(Tag, InlineImage(self.doc, os.path.join(dirPath, f),width=Mm(int(80))))
+                    except Exception:
+                        continue
+                    
     def format_save_name(self, sheetdata):
         namelist = []
         local_time = time.localtime()
@@ -93,6 +113,7 @@ class Autoreport_Runthread(QtCore.QThread):
         self.context = {}
         self.doc = DocxTemplate(self.Templatepath)
         print("Autoreport Runing ...")
+        self.IMG2WORD()
         self.EXCEL2WORD("Testing")
     
     def stop(self):
