@@ -1,6 +1,3 @@
-from ast import While
-from msilib.schema import TextStyle
-from re import S
 import time
 import numpy as np
 from struct import unpack
@@ -180,7 +177,7 @@ class Auto_trig():
         self.stack_p2p.append(abs(max_volume - min_volume))
 
         self.scope.do_command('CH1:OFFSet '+str(self.trig_level))
-        self.scope.do_command('CH1:SCAle '+str(self.pk2pk*0.2))
+        self.scope.do_command('CH1:SCAle '+str(self.pk2pk*0.5))
         self.scope.do_command('ACQuire:STOPAfter SEQuence')
         self.scope.do_command('acquire:state ON')
         self.check_single_state() # check while loop
@@ -279,7 +276,7 @@ class Auto_trig():
         if testype == "Regulation" :
             #scale_list = ["400E-3", "40E-3", "400E-6", "40E-6"]
             scale_list = ["400E-3", "40E-6"]
-            self.VISA_ADDRESS = "USB0::0x0699::0x0405::C022392::INSTR"
+            self.VISA_ADDRESS = self.VISA_ADDRESS
 
             self.setup( "1E+6")
             self.set_measurement()
@@ -304,7 +301,7 @@ class Auto_trig():
                 self.set_scale(self.normal_scale)
 
         elif testype == "Load":
-            self.VISA_ADDRESS = "USB0::0x0699::0x0405::C022392::INSTR"
+            self.VISA_ADDRESS = self.VISA_ADDRESS
             #self.scope.do_command('ACQuire:STOPAfter SEQuence')
             #self.scope.do_command('acquire:state ON')
             self.setup("1E+6")
@@ -315,7 +312,7 @@ class Auto_trig():
             #self.check_single_state() # check while loop
         
         elif testype == "Line":
-            self.VISA_ADDRESS = "USB0::0x0699::0x0405::C022392::INSTR"
+            self.VISA_ADDRESS = self.VISA_ADDRESS
             self.setup("1E+6")
 
             #self.set_measurement()

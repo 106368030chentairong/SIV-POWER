@@ -80,8 +80,14 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread.timestamp = self.timestamp
         self.thread.temperature_index = self.temperature_index
         self.thread._respones.connect(self.respones2table)
+        self.thread._device_info.connect(self.set_device_info)
         self.thread._stop_signal.connect(self.switch_table)
         self.thread.start()
+    
+    def set_device_info(self, msg):
+        self.label_Oc_name_2.setText(msg[0])
+        self.label_PS_name_2.setText(msg[1])
+        self.label_EL_name_2.setText(msg[2])
     
     def table2excel(self):
         if self.switch_index == 0 and self.temperature_index == 0:
@@ -110,7 +116,9 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
                 for col_index in range(col):
                     teext = str(self.tableWidget_testplan.item(row_index, col_index).text())
                     basicsheet.cell(row=((row-1)*self.temperature_index)+(sheet_con+3), column=col_index+index_dic[type_name]).value = teext
-     
+        basicsheet.cell(row=1, column=3).value = self.label_Oc_name_2.text()
+        basicsheet.cell(row=2, column=3).value = self.label_PS_name_2.text()
+        basicsheet.cell(row=3, column=3).value = self.label_EL_name_2.text()
         wb_data.save("Measurement data/"+self.timestamp+"/testingdata_"+self.timestamp+".xlsx")
 
     def rum_autoreport(self):
