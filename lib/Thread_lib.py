@@ -1,5 +1,5 @@
 import time
-from tkinter import N
+from webbrowser import get
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 
@@ -8,12 +8,13 @@ from lib.Auto_trig import Auto_trig
 from lib.Auto_dc_loading import Auto_dc_loding
 from lib.get_measure_data import get_measure_data
 from lib.Autoreport import Autoreport_Runthread
+from lib.get_device_info import get_info
 
 class Runthread(QtCore.QThread):
     _testype = pyqtSignal(str)
     _stop_signal = pyqtSignal()
     _respones = pyqtSignal(list)
-
+    _device_info = pyqtSignal(list)
     def __init__(self):
         super(Runthread, self).__init__()
         self.timestamp = None
@@ -47,7 +48,17 @@ class Runthread(QtCore.QThread):
         self.image_index = None
 
     def run(self):
+        try:
+            get_info_obj = get_info()
+            get_info_obj.TK_VISA_ADDRESS = self.TK_VISA_ADDRESS
+            get_info_obj.PW_VISA_ADDRESS = self.PW_VISA_ADDRESS
+            get_info_obj.LD_VISA_ADDRESS = self.LD_VISA_ADDRESS
+            info_data = get_info_obj.run()
 
+            self._device_info.emit(info_data)
+        except Exception:
+            print("get_info ERROR")
+        
         # Runing to the table row data
         for index, row in enumerate(self.excel_data):
             # Start in to 2 num row 
@@ -81,6 +92,7 @@ class Runthread(QtCore.QThread):
 
             # Auto trig
             auto_scope = Auto_trig()
+            auto_scope.VISA_ADDRESS = self.TK_VISA_ADDRESS
             auto_scope.start(testype)
 
             # set up measure items & get values
@@ -91,8 +103,8 @@ class Runthread(QtCore.QThread):
 
         elif testype == "Line" :
             auto_scope = Auto_trig()
+            auto_scope.VISA_ADDRESS = self.TK_VISA_ADDRESS
             auto_scope.start("Line")
-            auto_scope.VISA_ADDRESS = "USB0::0x0699::0x0405::C022392::INSTR"
 
             load_scope = Auto_dc_loding()
             load_scope.PW_VISA_ADDRESS = self.PW_VISA_ADDRESS
@@ -131,8 +143,8 @@ class Runthread(QtCore.QThread):
         elif testype == "Eff" :
             # Auto trig
             auto_scope = Auto_trig()
+            auto_scope.VISA_ADDRESS = self.TK_VISA_ADDRESS
             auto_scope.start("Line")
-            auto_scope.VISA_ADDRESS = "USB0::0x0699::0x0405::C022392::INSTR"
 
             load_scope = Auto_dc_loding()
             load_scope.PW_VISA_ADDRESS = self.PW_VISA_ADDRESS

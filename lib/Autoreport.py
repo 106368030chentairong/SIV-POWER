@@ -1,14 +1,7 @@
-from calendar import c
 import os, sys, time
 from openpyxl import load_workbook
 from docxtpl import DocxTemplate , InlineImage, RichText
 from docx.shared import Mm
-import string
-from PIL import Image
-import pythoncom
-
-import tkinter as tk
-from pathlib import Path
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
@@ -80,7 +73,7 @@ class Autoreport_Runthread(QtCore.QThread):
                             self.context.setdefault(Tag, InlineImage(self.doc, os.path.join(dirPath, f),width=Mm(int(80))))
                     except Exception:
                         continue
-                    
+
     def format_save_name(self, sheetdata):
         namelist = []
         local_time = time.localtime()

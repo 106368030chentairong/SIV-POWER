@@ -4,13 +4,15 @@
 .qt_for_python
 .vscode
 
-build
 *dist*
-
 *.npy
 *_tmp
-
 *.pdf
+*.jpg
+*.png
 
 Measurement data/
+image/
+build/
+compile/
 image/
