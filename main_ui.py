@@ -1,4 +1,5 @@
 import os, sys, time
+from datetime import datetime
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
@@ -16,6 +17,8 @@ from untitled import *
 from lib.logcolors import bcolors
 from lib.Thread_lib import Runthread
 from lib.Autoreport import Autoreport_Runthread
+from lib.Manual_thread_lib import Manual_Runthread
+from lib.log_lib import *
 
 class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -29,7 +32,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.temperature = ["-20", "25", "50"]
         self.temperature_index_list = {"-20":0, "25":1, "50":2}
         self.temperature_index = 0
-        self.test_item = ["Regulation", "Load","Line","Eff",]
+        self.test_item = ["Regulation", "Load","Line","Eff"]
         self.switch_index = 0
 
         self.set_comboBox_sheet(self.comboBox_temp, self.temperature)
@@ -44,6 +47,10 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_PS_visa.clicked.connect(self.setup_PS_addres)
         self.pushButton_EL_visa.clicked.connect(self.setup_EL_addres)
 
+        self.pushButton_Oc_label.clicked.connect(self.refresh_info)
+        self.pushButton_ch_read.clicked.connect(self.read_label)
+        self.pushButton_ch_write.clicked.connect(self.write_label)
+
         self.pushButton_testplan.clicked.connect(self.open_testplan)
         self.pushButton_template.clicked.connect(self.open_template)
 
@@ -51,7 +58,63 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         #self.pushButton_Cancel.clicked.connect(self.close)
 
         self.excel_data = []
+
+        self.set_logger()
     
+    def set_logger(self):
+        now = datetime.now().strftime('%Y%m%d%H%M%S')
+        logging.info("Setup Log File to "+ setup_loggers(now, prefix="./logs"))
+        add_text_handler(self.logger_callback)
+
+    def logger_callback(self, msg):
+        try:
+            self.textBrowser_log.insertPlainText(msg+"\n")
+            #self.textBrowser_log.append(msg)
+            #self.textBrowser_log.verticalScrollBar().setValue(
+            #self.textBrowser_log.verticalScrollBar().maximum())
+            #self.textBrowser_log.moveCursor(QtGui.QTextCursor.End)
+        except Exception:
+            pass
+
+    def write_label(self):
+        try:
+            self.thread = Manual_Runthread()
+            self.thread.switch = "3"
+            self.thread.TK_VISA_ADDRESS = self.comboBox_TK_visa.currentText()
+            self.thread.label_tmp = [(f'"{self.lineEdit_ch1.text()}"'),
+                                    (f'"{self.lineEdit_ch2.text()}"'),
+                                    (f'"{self.lineEdit_ch3.text()}"'),
+                                    (f'"{self.lineEdit_ch4.text()}"'),]
+            self.thread.start()
+        except Exception:
+            pass
+
+    def read_label(self):
+        try:
+            self.thread = Manual_Runthread()
+            self.thread.switch = "2"
+            self.thread.TK_VISA_ADDRESS = self.comboBox_TK_visa.currentText()
+            self.thread._CH_label.connect(self.ch_label)
+            self.thread.start()
+        except Exception:
+            pass
+
+    def ch_label(self, msg):
+        print(msg)
+        self.lineEdit_ch1.setText(msg[0].strip('"'))
+        self.lineEdit_ch2.setText(msg[1].strip('"'))
+        self.lineEdit_ch3.setText(msg[2].strip('"'))
+        self.lineEdit_ch4.setText(msg[3].strip('"'))
+    
+    def refresh_info(self):
+        self.thread = Manual_Runthread()
+        self.thread.TK_VISA_ADDRESS = self.comboBox_TK_visa.currentText()
+        self.thread.PW_VISA_ADDRESS = self.comboBox_PS_visa.currentText()
+        self.thread.LD_VISA_ADDRESS = self.comboBox_EL_visa.currentText()
+        self.thread.switch = "1"
+        self.thread._device_info.connect(self.set_device_info)
+        self.thread.start()
+
     def check_folder(self):
         if not os.path.isfile("./Measurement data/"+self.timestamp):
             os.mkdir( "./Measurement data/"+self.timestamp)
@@ -101,12 +164,10 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         index_dic = {"Regulation": 4 , "Load": 24, "Line":40, "Eff":57}
         sheet_con = 0
         type_name = self.test_item[self.switch_index]
-        print(index_dic[type_name] , type_name)
+        #print(index_dic[type_name] , type_name)
         col = self.tableWidget_testplan.columnCount()
         row = self.tableWidget_testplan.rowCount()
-
-        print(col,row)
-        
+        #print(col,row)
         for row_index in range(row):
             if row_index > 0:
                 sheet_con += 1
@@ -139,6 +200,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
             self.autotest()
         if self.switch_index == len(self.test_item) and self.temperature_index == 2:
             self.rum_autoreport()
+            logging.info("Done !")
 
     def w2table(self):
         self.tableWidget_testplan.clearContents()
@@ -198,7 +260,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
                 sheetnames = self.read_sheetnames(self.lineEdit_testplan.text())
                 self.set_comboBox_sheet(self.comboBox_testplan, sheetnames)
                 self.switch_index = 0
-                print(self.test_item[0])
+                #print(self.test_item[0])
                 self.load_excel(self.test_item[0])
 
         except Exception as e:
@@ -244,13 +306,13 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
             combobox_obj.addItems("")
     
     def respones2table(self, msg):
-        print(msg)
+        #print(msg)
         index_dic = {"Line":11,"Regulation": 14 , "Load": 10,  "Eff":6}
         index_shift = index_dic[self.test_item[self.switch_index]]
 
         for index, col in enumerate(msg[1]):
             item = QTableWidgetItem(str(col))
-            print(msg[0]-1, index+index_shift)
+            #print(msg[0]-1, index+index_shift)
             self.tableWidget_testplan.setItem(msg[0]-1, index+index_shift , item)
 
 

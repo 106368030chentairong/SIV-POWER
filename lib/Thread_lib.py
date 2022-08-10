@@ -1,7 +1,8 @@
 import time
-from webbrowser import get
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
+
+import logging
 
 #from lib.tektronix_4000 import DPO4000_visa
 from lib.Auto_trig import Auto_trig
@@ -56,25 +57,30 @@ class Runthread(QtCore.QThread):
             info_data = get_info_obj.run()
 
             self._device_info.emit(info_data)
-        except Exception:
-            print("get_info ERROR")
+        except Exception as e:
+            print(e)
+            logging.error(e)
         
         # Runing to the table row data
         for index, row in enumerate(self.excel_data):
             # Start in to 2 num row 
             if index >= 2 :
-                self.image_index = str(index-1)
-                self.setup_rel(row)
-                result = self.auto_control(self.testype)
-                
+                try:
+                    self.image_index = str(index-1)
+                    self.setup_rel(row)
+                    result = self.auto_control(self.testype)
+                    self._respones.emit([index,result])
+                except Exception as e:
+                    print(e)
+                    logging.error(e)
+
                 #result = ["5", "5", "5","5"] #test
                 #if self.testype != "Eff":
                 #    judge = self.judge(result)
                 #    result.append(judge)
                 #time.sleep(1)  #test
-                
-                self._respones.emit([index,result])
-        time.sleep(5)        
+
+        time.sleep(5)
         self._stop_signal.emit()
     
     def auto_control(self, testype):
@@ -126,7 +132,7 @@ class Runthread(QtCore.QThread):
 
             # Setup Trig level
             time.sleep(2)
-            print(SLOpe)
+            logging.info(SLOpe)
             auto_scope.setup_trig(str(trig_votage) , SLOpe) #  {RISe|FALL}
 
             # setup Low level

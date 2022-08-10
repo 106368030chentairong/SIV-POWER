@@ -6,6 +6,8 @@ from docx.shared import Mm
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 
+import logging
+
 class Autoreport_Runthread(QtCore.QThread):
     _signal = pyqtSignal(str)
     _logtext = pyqtSignal(str)
@@ -50,7 +52,7 @@ class Autoreport_Runthread(QtCore.QThread):
             '''
         self.doc.render(self.context)
 
-        print("Report Path : ./"+self.format_save_name(sheet_data))
+        logging.info("Report Path : ./"+self.format_save_name(sheet_data))
         #print(sheet_data)
         self.doc.save("./Measurement data/"+self.timestamp+"/"+self.format_save_name(sheet_data))     
     
@@ -105,7 +107,6 @@ class Autoreport_Runthread(QtCore.QThread):
     def run(self):
         self.context = {}
         self.doc = DocxTemplate(self.Templatepath)
-        print("Autoreport Runing ...")
         self.IMG2WORD()
         self.EXCEL2WORD("Testing")
     

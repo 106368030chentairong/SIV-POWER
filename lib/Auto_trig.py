@@ -13,13 +13,13 @@ class Auto_trig():
         self.VISA_ADDRESS = None
         self.scope = None
         #self.record_length = None
-        self.normal_scale = "1E-3" 
+        self.normal_scale = "1E-3"
         self.trig_level = 0
         self.pk2pk = 0
         self.stack_p2p = []
         self.frequency = 0
         self.check_frq_num = 0
-        self.check_trig_num = 0 
+        self.check_trig_num = 0
     
     def check_stack_dif(self):
         max_index = 0
@@ -70,7 +70,7 @@ class Auto_trig():
         self.scope.do_command('CH1:SCAle 5')
         self.scope.do_command('CH3:SCALe 1')
         self.scope.close()
-    
+
     def set_scale(self, scale):
         self.scope = DPO4000_visa()
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
@@ -106,7 +106,7 @@ class Auto_trig():
             self.scope.do_command("SAVe:IMAGe:FILEF PNG")
             self.scope.do_command("HARDCopy STARt")
             imgData = self.scope.read_raw()
-            
+
             imgFile = open(save_path+".png", "wb")
             imgFile.write(imgData)
             imgFile.close()
@@ -126,6 +126,13 @@ class Auto_trig():
             else:
                 return frequency
         return None
+    
+    def auto_getdef_vale(self):
+        self.scope = DPO4000_visa()
+        self.scope.VISA_ADDRESS = self.VISA_ADDRESS
+        self.scope.connect()
+
+        self.scope.close()
     
     def get_rawdata(self, channel, scale):
         self.scope = DPO4000_visa()
@@ -239,7 +246,7 @@ class Auto_trig():
             ver_val = pk2pk_list.pop()
             if pk2pk_list != []:
                 print(abs(pk2pk_list[-1] - ver_val)/pk2pk_list[-1])
-    
+
     def setup_trig(self, A_level, SLOpe):
         self.scope = DPO4000_visa()
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
@@ -252,7 +259,6 @@ class Auto_trig():
         self.scope.do_command('FPAnel:PRESS MENUOff')
         self.scope.do_command('SELECT:CH1 ON')
         self.scope.do_command('SELECT:CH2 ON')
-        self.scope.do_command('SELECT:CH3 ON')
         self.scope.do_command('SELECT:CH3 ON')
         self.scope.do_command('CH1:POSition 2')
         self.scope.do_command('CH2:POSition 0')
@@ -288,9 +294,9 @@ class Auto_trig():
                 pk2pk_time, avg_time = self.find_timedif(Volts, Time, scale)
 
             msg = "pk2pk time len: {0} \n, avg time : {1}".format(pk2pk_time, avg_time)
-            print(msg)
+            #print(msg)
             if pk2pk_time != None:
-                print("avg_time/scale :" + str(avg_time/scale))
+                #print("avg_time/scale :" + str(avg_time/scale))
                 if (avg_time/scale) < 1 :
                     self.set_scale(self.normal_scale)
                 if (avg_time/scale) > 1 :

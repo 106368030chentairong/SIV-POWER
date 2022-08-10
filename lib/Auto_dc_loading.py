@@ -1,4 +1,5 @@
 from lib.tektronix_4000 import DPO4000_visa
+import logging
 
 class Auto_dc_loding():
     def __init__(self):
@@ -18,7 +19,7 @@ class Auto_dc_loding():
         self.scope.connect()
         
         info = self.scope.do_query("*IDN?")
-        print("DC Power supply Name : " + info)
+        logging.info("DC Power supply Name : " + info)
         
         self.scope.do_command("VOLTage " + str(voltage))
         
@@ -31,7 +32,7 @@ class Auto_dc_loding():
         self.scope.connect()
 
         info = self.scope.do_query("*IDN?")
-        print("DC Electronic loads Name : " + info)
+        logging.info("DC Electronic loads Name : " + info)
 
         if str(mode) == "0":
             cmd_list = ["*RST", "SHOW L" , "MODE CCH", "CURR:STAT:L1 "+str(self.CurrDynH) ]
@@ -55,9 +56,9 @@ class Auto_dc_loding():
         self.scope.connect()
 
         pw_votg = self.scope.do_query("MEAS:VOLT?") #MEAS:VOLT?
-        print("Power supply Voltage : "+ str(pw_votg) +"V") #MEAS:CURR?
+        logging.info("Power supply Voltage : "+ str(pw_votg) +"V") #MEAS:CURR?
         pw_CURRent = self.scope.do_query("MEAS:CURR?")
-        print("Power supply CURRent : "+ str(pw_CURRent) +"A")
+        logging.info("Power supply CURRent : "+ str(pw_CURRent) +"A")
         self.scope.close()
 
         self.scope = DPO4000_visa()
@@ -65,14 +66,14 @@ class Auto_dc_loding():
         self.scope.connect()
 
         load_votg = self.scope.do_query("MEAS:VoLT?")
-        print("Electronic loads Voltage : "+ str(load_votg) +"V")
+        logging.info("Electronic loads Voltage : "+ str(load_votg) +"V")
         load_CURRent = self.scope.do_query("MEAS:CURRent?")
-        print("Electronic loads CURRent : "+ str(load_CURRent) +"A")
+        logging.info("Electronic loads CURRent : "+ str(load_CURRent) +"A")
         self.scope.close()
 
-        pw = (float(load_votg)*float(load_CURRent))/(float(pw_votg)*float(pw_CURRent))
-        pw = str(pw*100)+"%"
-        print("Power Efficiency : " + pw)
+        pw = (float(load_votg)*float(load_CURRent))/(float(pw_votg)*float(pw_CURRent))*100
+        pw = ("%.2f" % pw)
+        logging.info("Power Efficiency : " + pw)
         result_tmp = [float(pw_votg), float(pw_CURRent), float(load_votg), float(load_CURRent), pw]
         return result_tmp
 
