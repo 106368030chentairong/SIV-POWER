@@ -19,6 +19,7 @@ from lib.Thread_lib import Runthread
 from lib.Autoreport import Autoreport_Runthread
 from lib.Manual_thread_lib import Manual_Runthread
 from lib.log_lib import *
+from lib.upload_too import Upload_Runthread
 
 class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -54,7 +55,10 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_testplan.clicked.connect(self.open_testplan)
         self.pushButton_template.clicked.connect(self.open_template)
 
+        self.pushButton_open_upload.clicked.connect(self.open_uploadfile)
+
         self.pushButton_RUN.clicked.connect(self.btn_run)
+        self.pushButton_Cancel.clicked.connect(self.thread_stop)
         #self.pushButton_Cancel.clicked.connect(self.close)
 
         self.excel_data = []
@@ -276,6 +280,21 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
             print(e)
             logging.error("Open Word File Error ! ")
 
+    def open_uploadfile(self):
+        try:
+            filename, filetype = QFileDialog.getOpenFileName(self, "Open file", "./", "Excel (*.xlsx *.xls)")
+            if filename != "":
+                self.lineEdit_upload.setText(filename)
+
+                upload_sys = Upload_Runthread()
+                upload_sys.file_path = self.lineEdit_upload.text()
+                upload_sys.tableWidget_upload = self.tableWidget_upload
+                upload_sys.run()
+
+        except Exception as e:
+            print(e)
+            logging.error("Open Word File Error ! ")
+
     def getusblist(self):
         try:
             rm = visa.ResourceManager()
@@ -315,6 +334,9 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
             #print(msg[0]-1, index+index_shift)
             self.tableWidget_testplan.setItem(msg[0]-1, index+index_shift , item)
 
+    def thread_stop(self):
+        logging.info("Cancel Generate Report Progress")
+        self.thread.terminate()
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)

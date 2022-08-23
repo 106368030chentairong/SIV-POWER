@@ -2,6 +2,8 @@ import time
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import *
 
+import logging
+
 from lib.get_device_info import get_info
 from lib.tektronix_4000 import DPO4000_visa
 
@@ -43,7 +45,6 @@ class Manual_Runthread(QtCore.QThread):
     def read_label(self):
         if self.TK_VISA_ADDRESS != None:
             try:
-                print(self.TK_VISA_ADDRESS)
                 self.scope_TK = DPO4000_visa()
                 self.scope_TK.VISA_ADDRESS = self.TK_VISA_ADDRESS
                 self.scope_TK.GLOBAL_TOUT = 1000
@@ -64,7 +65,7 @@ class Manual_Runthread(QtCore.QThread):
     def write_label(self):
         if self.TK_VISA_ADDRESS != None:
             try:
-                print(self.label_tmp)
+                logging.info(self.label_tmp)
                 self.TK_VISA_ADDRESS
                 self.scope_TK = DPO4000_visa()
                 self.scope_TK.VISA_ADDRESS = self.TK_VISA_ADDRESS

@@ -10,13 +10,25 @@
     <height>815</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Calibri Light</family>
+    <pointsize>11</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
-   <string>AutoTrig V0.1.1</string>
+   <string>AutoTrig V0.1.2</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
     <item>
      <widget class="QTabWidget" name="tabWidget_main">
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="currentIndex">
        <number>0</number>
       </property>
@@ -50,6 +62,12 @@
               <layout class="QGridLayout" name="gridLayout_5">
                <item row="0" column="0">
                 <widget class="QTableWidget" name="tableWidget_testplan">
+                 <property name="font">
+                  <font>
+                   <family>Calibri</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
                  <property name="editTriggers">
                   <set>QAbstractItemView::NoEditTriggers</set>
                  </property>
@@ -81,6 +99,12 @@
                <height>16777215</height>
               </size>
              </property>
+             <property name="font">
+              <font>
+               <family>Calibri</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
              <property name="currentIndex">
               <number>0</number>
              </property>
@@ -93,6 +117,12 @@
                 <layout class="QVBoxLayout" name="verticalLayout_4">
                  <item>
                   <widget class="QGroupBox" name="groupBox_2">
+                   <property name="font">
+                    <font>
+                     <family>Calibri</family>
+                     <pointsize>11</pointsize>
+                    </font>
+                   </property>
                    <property name="title">
                     <string>VISA ADDRESS</string>
                    </property>
@@ -109,7 +139,8 @@
                         </property>
                         <property name="font">
                          <font>
-                          <pointsize>9</pointsize>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
                           <weight>50</weight>
                           <bold>false</bold>
                          </font>
@@ -120,7 +151,14 @@
                        </widget>
                       </item>
                       <item row="0" column="1">
-                       <widget class="QComboBox" name="comboBox_TK_visa"/>
+                       <widget class="QComboBox" name="comboBox_TK_visa">
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
+                       </widget>
                       </item>
                       <item row="0" column="0">
                        <widget class="QLabel" name="label_TK_visa">
@@ -132,7 +170,8 @@
                         </property>
                         <property name="font">
                          <font>
-                          <pointsize>9</pointsize>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
                           <weight>50</weight>
                           <bold>false</bold>
                          </font>
@@ -152,7 +191,8 @@
                         </property>
                         <property name="font">
                          <font>
-                          <pointsize>9</pointsize>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
                           <weight>50</weight>
                           <bold>false</bold>
                          </font>
@@ -170,6 +210,12 @@
                           <height>16777215</height>
                          </size>
                         </property>
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Refresh</string>
                         </property>
@@ -183,16 +229,36 @@
                           <height>16777215</height>
                          </size>
                         </property>
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Refresh</string>
                         </property>
                        </widget>
                       </item>
                       <item row="1" column="1">
-                       <widget class="QComboBox" name="comboBox_PS_visa"/>
+                       <widget class="QComboBox" name="comboBox_PS_visa">
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
+                       </widget>
                       </item>
                       <item row="2" column="1">
-                       <widget class="QComboBox" name="comboBox_EL_visa"/>
+                       <widget class="QComboBox" name="comboBox_EL_visa">
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
+                       </widget>
                       </item>
                       <item row="2" column="2">
                        <widget class="QPushButton" name="pushButton_EL_visa">
@@ -201,6 +267,12 @@
                           <width>80</width>
                           <height>16777215</height>
                          </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
                         </property>
                         <property name="text">
                          <string>Refresh</string>
@@ -228,6 +300,12 @@
                           <height>16777215</height>
                          </size>
                         </property>
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Testplan：</string>
                         </property>
@@ -241,23 +319,49 @@
                           <height>16777215</height>
                          </size>
                         </property>
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Open</string>
                         </property>
                        </widget>
                       </item>
                       <item row="4" column="1">
-                       <widget class="QLineEdit" name="lineEdit_template"/>
+                       <widget class="QLineEdit" name="lineEdit_template">
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
+                       </widget>
                       </item>
                       <item row="2" column="1">
                        <widget class="QComboBox" name="comboBox_testplan">
                         <property name="enabled">
                          <bool>true</bool>
                         </property>
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
                        </widget>
                       </item>
                       <item row="1" column="1">
-                       <widget class="QLineEdit" name="lineEdit_testplan"/>
+                       <widget class="QLineEdit" name="lineEdit_testplan">
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
+                       </widget>
                       </item>
                       <item row="4" column="2">
                        <widget class="QPushButton" name="pushButton_template">
@@ -266,6 +370,12 @@
                           <width>80</width>
                           <height>16777215</height>
                          </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
                         </property>
                         <property name="text">
                          <string>Open</string>
@@ -280,13 +390,26 @@
                           <height>16777215</height>
                          </size>
                         </property>
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
                         <property name="text">
                          <string>Template：</string>
                         </property>
                        </widget>
                       </item>
                       <item row="0" column="1">
-                       <widget class="QComboBox" name="comboBox_temp"/>
+                       <widget class="QComboBox" name="comboBox_temp">
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
+                        </property>
+                       </widget>
                       </item>
                       <item row="0" column="0">
                        <widget class="QLabel" name="label_temp">
@@ -295,6 +418,12 @@
                           <width>100</width>
                           <height>16777215</height>
                          </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Calibri</family>
+                          <pointsize>11</pointsize>
+                         </font>
                         </property>
                         <property name="text">
                          <string>Temperature：</string>
@@ -323,6 +452,12 @@
                   <layout class="QVBoxLayout" name="verticalLayout">
                    <item>
                     <widget class="QCheckBox" name="checkBox_generate_report">
+                     <property name="font">
+                      <font>
+                       <family>Calibri</family>
+                       <pointsize>11</pointsize>
+                      </font>
+                     </property>
                      <property name="text">
                       <string>Generate report</string>
                      </property>
@@ -333,6 +468,12 @@
                    </item>
                    <item>
                     <widget class="QProgressBar" name="progressBar_autotest">
+                     <property name="font">
+                      <font>
+                       <family>Calibri</family>
+                       <pointsize>11</pointsize>
+                      </font>
+                     </property>
                      <property name="value">
                       <number>0</number>
                      </property>
@@ -351,6 +492,12 @@
                     <layout class="QHBoxLayout" name="horizontalLayout">
                      <item>
                       <widget class="QPushButton" name="pushButton_RUN">
+                       <property name="font">
+                        <font>
+                         <family>Calibri</family>
+                         <pointsize>11</pointsize>
+                        </font>
+                       </property>
                        <property name="text">
                         <string>RUN</string>
                        </property>
@@ -358,6 +505,12 @@
                      </item>
                      <item>
                       <widget class="QPushButton" name="pushButton_Cancel">
+                       <property name="font">
+                        <font>
+                         <family>Calibri</family>
+                         <pointsize>11</pointsize>
+                        </font>
+                       </property>
                        <property name="text">
                         <string>CANCEL</string>
                        </property>
@@ -397,9 +550,15 @@
          </spacer>
         </item>
         <item row="1" column="0">
-         <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,1,0" columnstretch="1">
+         <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,0,0" columnstretch="0">
           <item row="2" column="0">
            <widget class="QGroupBox" name="groupBox_6">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="title">
              <string>Channel Label</string>
             </property>
@@ -408,6 +567,12 @@
               <layout class="QHBoxLayout" name="horizontalLayout_2">
                <item>
                 <widget class="QPushButton" name="pushButton_ch_read">
+                 <property name="font">
+                  <font>
+                   <family>Calibri</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>Read</string>
                  </property>
@@ -415,6 +580,12 @@
                </item>
                <item>
                 <widget class="QPushButton" name="pushButton_ch_write">
+                 <property name="font">
+                  <font>
+                   <family>Calibri</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>Write</string>
                  </property>
@@ -432,10 +603,22 @@
                    <height>16777215</height>
                   </size>
                  </property>
+                 <property name="font">
+                  <font>
+                   <family>Calibri</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
                 </widget>
                </item>
                <item row="2" column="0">
                 <widget class="QLabel" name="label_6">
+                 <property name="font">
+                  <font>
+                   <family>Calibri</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>CH 3：</string>
                  </property>
@@ -449,10 +632,22 @@
                    <height>16777215</height>
                   </size>
                  </property>
+                 <property name="font">
+                  <font>
+                   <family>Calibri</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="0">
                 <widget class="QLabel" name="label_4">
+                 <property name="font">
+                  <font>
+                   <family>Calibri</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>CH 2：</string>
                  </property>
@@ -472,6 +667,12 @@
                    <height>16777215</height>
                   </size>
                  </property>
+                 <property name="font">
+                  <font>
+                   <family>Calibri</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>CH 1：</string>
                  </property>
@@ -485,10 +686,22 @@
                    <height>16777215</height>
                   </size>
                  </property>
+                 <property name="font">
+                  <font>
+                   <family>Calibri</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
                 </widget>
                </item>
                <item row="3" column="0">
                 <widget class="QLabel" name="label_7">
+                 <property name="font">
+                  <font>
+                   <family>Calibri</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
                  <property name="text">
                   <string>CH 4：</string>
                  </property>
@@ -502,6 +715,12 @@
                    <height>16777215</height>
                   </size>
                  </property>
+                 <property name="font">
+                  <font>
+                   <family>Calibri</family>
+                   <pointsize>11</pointsize>
+                  </font>
+                 </property>
                 </widget>
                </item>
               </layout>
@@ -511,25 +730,36 @@
           </item>
           <item row="1" column="0">
            <widget class="QGroupBox" name="groupBox_5">
+            <property name="font">
+             <font>
+              <family>Calibri</family>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
             <property name="title">
              <string>Device info: </string>
             </property>
             <layout class="QGridLayout" name="gridLayout_16">
              <item row="0" column="0">
               <layout class="QGridLayout" name="gridLayout_9">
-               <item row="0" column="0">
+               <item row="1" column="0">
                 <layout class="QGridLayout" name="gridLayout_15">
-                 <item row="1" column="1">
-                  <widget class="QLabel" name="label_PS_name_2">
-                   <property name="text">
-                    <string/>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_PS">
+                   <property name="maximumSize">
+                    <size>
+                     <width>150</width>
+                     <height>16777215</height>
+                    </size>
                    </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QLabel" name="label_EL_name_2">
+                   <property name="font">
+                    <font>
+                     <family>Calibri</family>
+                     <pointsize>11</pointsize>
+                    </font>
+                   </property>
                    <property name="text">
-                    <string/>
+                    <string>Power Supply：</string>
                    </property>
                   </widget>
                  </item>
@@ -541,21 +771,14 @@
                      <height>16777215</height>
                     </size>
                    </property>
+                   <property name="font">
+                    <font>
+                     <family>Calibri</family>
+                     <pointsize>11</pointsize>
+                    </font>
+                   </property>
                    <property name="text">
                     <string>Electronic Load：</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_PS">
-                   <property name="maximumSize">
-                    <size>
-                     <width>150</width>
-                     <height>16777215</height>
-                    </size>
-                   </property>
-                   <property name="text">
-                    <string>Power Supply：</string>
                    </property>
                   </widget>
                  </item>
@@ -567,38 +790,82 @@
                      <height>16777215</height>
                     </size>
                    </property>
+                   <property name="font">
+                    <font>
+                     <family>Calibri</family>
+                     <pointsize>11</pointsize>
+                    </font>
+                   </property>
                    <property name="text">
-                    <string>Oscilloscope : </string>
+                    <string>Oscilloscope ：</string>
                    </property>
                   </widget>
                  </item>
                  <item row="0" column="1">
                   <widget class="QLabel" name="label_Oc_name_2">
+                   <property name="font">
+                    <font>
+                     <family>Calibri</family>
+                     <pointsize>11</pointsize>
+                    </font>
+                   </property>
                    <property name="text">
-                    <string/>
+                    <string>None</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QLabel" name="label_PS_name_2">
+                   <property name="font">
+                    <font>
+                     <family>Calibri</family>
+                     <pointsize>11</pointsize>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>None</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="1">
+                  <widget class="QLabel" name="label_EL_name_2">
+                   <property name="font">
+                    <font>
+                     <family>Calibri</family>
+                     <pointsize>11</pointsize>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>None</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="3" column="0" colspan="2">
+                  <widget class="QPushButton" name="pushButton_Oc_label">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Calibri</family>
+                     <pointsize>11</pointsize>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Refresh</string>
                    </property>
                   </widget>
                  </item>
                 </layout>
-               </item>
-               <item row="1" column="0">
-                <widget class="QPushButton" name="pushButton_Oc_label">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>16777215</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Refresh</string>
-                 </property>
-                </widget>
                </item>
               </layout>
              </item>
@@ -614,7 +881,21 @@
         <string>Upload Tool</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_8">
-        <item row="1" column="0">
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLineEdit" name="lineEdit_upload"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_open_upload">
+            <property name="text">
+             <string>Open</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="0">
          <widget class="QProgressBar" name="progressBar_upload">
           <property name="value">
            <number>0</number>
@@ -624,10 +905,10 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
+        <item row="1" column="0">
          <widget class="QTableWidget" name="tableWidget_upload"/>
         </item>
-        <item row="2" column="0">
+        <item row="3" column="0">
          <widget class="QPushButton" name="pushButton_upload">
           <property name="text">
            <string>Upload</string>
@@ -646,12 +927,25 @@
         <height>150</height>
        </size>
       </property>
+      <property name="font">
+       <font>
+        <family>Calibri</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="title">
        <string>Systea Log</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_10">
        <item row="0" column="0">
-        <widget class="QTextBrowser" name="textBrowser_log"/>
+        <widget class="QTextBrowser" name="textBrowser_log">
+         <property name="font">
+          <font>
+           <family>Calibri</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

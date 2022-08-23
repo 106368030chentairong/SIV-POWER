@@ -40,9 +40,8 @@ class DPO4000_visa():
     
     def do_query(self, command):
         try:
-            response = self.KsInfiniiumScope.query("%s" % command).strip()
             logging.info(command + " - Execute the Command Successfully ")
-            return response
+            return self.KsInfiniiumScope.query("%s" % command).strip()
         except Exception: 
             logging.error(command + " - Execute the Command Faill !")
             pass

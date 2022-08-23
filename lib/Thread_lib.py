@@ -84,7 +84,7 @@ class Runthread(QtCore.QThread):
         self._stop_signal.emit()
     
     def auto_control(self, testype):
-        print(testype)
+        logging.info("-"*20 + (testype) + "-"*20 )
         if testype == "Regulation" or testype == "Load":
             # Auto setup power & loading
             load_scope = Auto_dc_loding()
@@ -128,11 +128,14 @@ class Runthread(QtCore.QThread):
                 SLOpe = "FALL"
             else:
                 SLOpe = "RISe"
-            trig_votage = str(4)
+            trig_votage = ((float(self.Voltage_1) - float(self.Voltage_2))/2 ) + float(self.Voltage_2)
+            
+            #trig_votage = str(trigger_level)
 
             # Setup Trig level
             time.sleep(2)
             logging.info(SLOpe)
+            logging.info("trig votage :"+ str(trig_votage))
             auto_scope.setup_trig(str(trig_votage) , SLOpe) #  {RISe|FALL}
 
             # setup Low level
@@ -171,7 +174,7 @@ class Runthread(QtCore.QThread):
             judge = self.judge(result_list)
             result_list.append(judge)
             auto_scope.get_IMAGe("./Measurement data/"+self.timestamp+"/"+ self.test_item[testype] +"_"+ str(self.temperature_index) +"_"+ self.image_index )
-
+            logging.info("./Measurement data/"+self.timestamp+"/"+ self.test_item[testype] +"_"+ str(self.temperature_index) +"_"+ self.image_index )
         return result_list
 
     def setup_rel(self, rowdata):
