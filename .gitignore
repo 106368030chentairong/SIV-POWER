@@ -3,6 +3,7 @@
 
 .qt_for_python
 .vscode
+.ven
 
 *dist*
 *.npy
