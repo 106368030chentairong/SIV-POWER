@@ -320,9 +320,10 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
             if len(usb_list) != 0:
                 combobox_obj.addItems(usb_list)
             else:
-                combobox_obj.addItems("")
+                combobox_obj.addItems([""])
         except Exception as e:
-            combobox_obj.addItems("")
+            logging.error(e)
+            combobox_obj.addItems([""])
     
     def respones2table(self, msg):
         #print(msg)
@@ -339,6 +340,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread.terminate()
 
 if __name__ == "__main__":
+    os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
     app = QtWidgets.QApplication(sys.argv)
     AutoRepor = mainProgram()
     AutoRepor.show()
