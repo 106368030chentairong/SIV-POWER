@@ -25,8 +25,9 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(mainProgram, self).__init__(parent)
         self.setupUi(self)
-        self.timestamp = None
+        self.UI_default_setup()
 
+        self.timestamp = None
         self.wb = None
         self.continue_single = 0
 
@@ -64,7 +65,24 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.excel_data = []
 
         self.set_logger()
+        self.statusBar().showMessage('Started successfully.')
     
+    def UI_default_setup(self):
+        #load settings
+        self.settings = QtCore.QSettings("config.ini", QtCore.QSettings.IniFormat)
+        self.lineEdit_time_scale.setText(self.settings.value("DEFaultsetup/Time_Scale"))
+        self.DSB_V_Scale_CH1.setValue(float(self.settings.value("DEFaultsetup/Voltage_Scale_CH1")))
+        self.DSB_V_Scale_CH2.setValue(float(self.settings.value("DEFaultsetup/Voltage_Scale_CH2")))
+        self.DSB_V_Scale_CH3.setValue(float(self.settings.value("DEFaultsetup/Voltage_Scale_CH3")))
+        self.DSB_offset_CH1.setValue(float(self.settings.value("DEFaultsetup/Offset_CH1")))
+        self.DSB_offset_CH2.setValue(float(self.settings.value("DEFaultsetup/Offset_CH2")))
+        self.DSB_offset_CH3.setValue(float(self.settings.value("DEFaultsetup/Offset_CH3")))
+        self.DSB_postion_CH1.setValue(float(self.settings.value("DEFaultsetup/Position_CH1")))
+        self.DSB_postion_CH2.setValue(float(self.settings.value("DEFaultsetup/Position_CH2")))
+        self.DSB_postion_CH3.setValue(float(self.settings.value("DEFaultsetup/Position_CH3")))
+        self.SB_display_wavform.setValue(float(self.settings.value("DEFaultsetup/Display_Wavform")))
+        self.SB_display_graticule.setValue(float(self.settings.value("DEFaultsetup/Display_Graticule")))
+
     def set_logger(self):
         now = datetime.now().strftime('%Y%m%d%H%M%S')
         logging.info("Setup Log File to "+ setup_loggers(now, prefix="./logs"))
@@ -74,8 +92,9 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         try:
             self.textBrowser_log.insertPlainText(msg+"\n")
             #self.textBrowser_log.append(msg)
-            #self.textBrowser_log.verticalScrollBar().setValue(
-            #self.textBrowser_log.verticalScrollBar().maximum())
+            self.textBrowser_log.verticalScrollBar().setValue(
+            self.textBrowser_log.verticalScrollBar().maximum())
+            self.textBrowser_log.update()
             #self.textBrowser_log.moveCursor(QtGui.QTextCursor.End)
         except Exception:
             pass
@@ -134,6 +153,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
             self.setup_timestamp()
             self.check_folder()
         self.switch_index = 0
+        self.statusBar().showMessage('Load excel : {}'.format(self.test_item[0]))
         self.load_excel(self.test_item[0])
         self.autotest()
     
@@ -150,6 +170,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread._device_info.connect(self.set_device_info)
         self.thread._stop_signal.connect(self.switch_table)
         self.thread.start()
+        self.statusBar().showMessage('{} Thread Runing ...'.format(self.test_item[self.switch_index]))
     
     def set_device_info(self, msg):
         self.label_Oc_name_2.setText(msg[0])
@@ -193,6 +214,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
             self.thread_autoreport.Templatepath = self.lineEdit_template.text()
             self.thread_autoreport.testplan_path = self.lineEdit_testplan.text()
             self.thread_autoreport.start()
+            self.statusBar().showMessage('Auto Report Thread Runing ...')
         except Exception as e:
             logging.error(e)
 
