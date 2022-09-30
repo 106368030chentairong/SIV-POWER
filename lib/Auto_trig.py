@@ -2,6 +2,8 @@ import time
 import numpy as np
 from struct import unpack
 
+from PyQt5 import QtCore
+
 import matplotlib.pyplot as plt
 
 import calendar
@@ -20,7 +22,7 @@ class Auto_trig():
         self.frequency = 0
         self.check_frq_num = 0
         self.check_trig_num = 0
-        self.Output_Voltage = 0.8
+        self.Output_Voltage = 20
     
     def check_stack_dif(self):
         max_index = 0
@@ -57,7 +59,7 @@ class Auto_trig():
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
         self.scope.connect()
         #self.scope.do_command('FPAnel:PRESS DEFaultsetup')
-        self.scope.do_command('DISplay:INTENSITy:WAVEform 90')
+        self.scope.do_command('DISplay:INTENSITy:WAVEform 99')
         self.scope.do_command('DISplay:INTENSITy:GRAticule 80')
         self.scope.do_command('HORizontal:RECOrdlength '+ str(record_length))
         self.scope.do_command('FPAnel:PRESS MENUOff')
@@ -65,11 +67,12 @@ class Auto_trig():
         self.scope.do_command('SELECT:CH2 OFF')
         self.scope.do_command('SELECT:CH3 ON')
         self.scope.do_command('SELECT:CH3 ON')
-        self.scope.do_command('CH1:POSition 0')
-        self.scope.do_command('CH3:POSition -2')
-        self.scope.do_command('CH1:OFFSet 1')
-        self.scope.do_command('CH1:SCAle 5')
-        self.scope.do_command('CH3:SCALe 1')
+        #Default settings for CH
+        self.scope.do_command('CH1:POSition 1') #Default position is CH1
+        self.scope.do_command('CH3:POSition -2') #Default position is CH3
+        self.scope.do_command('CH1:OFFSet 0') #Default offset is CH1
+        self.scope.do_command('CH1:SCAle 5') #Default value for voltage
+        self.scope.do_command('CH3:SCALe 1') #Default value for current
         self.scope.close()
 
     def set_scale(self, scale):
@@ -95,7 +98,7 @@ class Auto_trig():
             self.scope.do_command('MEASUrement:MEAS'+str(i+1)+':SOURCE1 CH'+str(channel_list[i]))
             self.scope.do_command('MEASUrement:MEAS'+str(i+1)+':TYPe '+ MEASUrement_Type[i])
             self.scope.do_command('MEASUrement:MEAS'+str(i+1)+':STATE ON')
-
+            time.sleep(3)
             self.Output_Voltage = float(self.scope.do_query('MEASUrement:MEAS1:VALue?'))
 
         self.scope.close()
@@ -130,12 +133,12 @@ class Auto_trig():
                 return frequency
         return None
     
-    def auto_getdef_vale(self):
+    '''def auto_getdef_vale(self):
         self.scope = DPO4000_visa()
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
         self.scope.connect()
 
-        self.scope.close()
+        self.scope.close()'''
     
     def get_rawdata(self, channel, scale):
         self.scope = DPO4000_visa()
@@ -143,14 +146,13 @@ class Auto_trig():
         self.scope.connect()
         
         self.scope.do_command('CH'+str(channel)+':BANdwidth 20E+6')
-        self.scope.do_command('CH1:OFFSet 0.0')
-        self.scope.do_command('CH1:SCAle 1')
+        self.scope.do_command('CH1:OFFSet 0')
+        self.scope.do_command('CH1:SCAle 5')
         self.scope.do_command('HORIZONTAL:SCALE '+str(scale))
 
         self.scope.do_command('TRIGger:A:EDGE:SOUrce CH'+str(channel))
         self.scope.do_command('TRIGger:A:LEVel '+str(self.trig_level))
         self.scope.do_command('TRIGger:A:EDGE:SOUrce CH1')
-        #self.scope.do_command('TRIGger:A:LEVel '+str(0))
         self.scope.do_command('TRIGger:A:TYPe EDGe')
         self.scope.do_command('TRIGger:A:MODe auto')
         self.scope.do_command('TRIGger:A:EDGE:SLOpe FALL')
@@ -186,8 +188,10 @@ class Auto_trig():
         self.pk2pk = abs(max_volume - min_volume)
         self.stack_p2p.append(abs(max_volume - min_volume))
 
-        self.scope.do_command('CH1:OFFSet '+str(self.trig_level))
-        self.scope.do_command('CH1:SCAle '+str(self.pk2pk*0.1))
+        print("get_rawdata() function : {} {} {}".format(self.trig_level,self.pk2pk,self.stack_p2p))
+
+        self.scope.do_command('CH1:OFFSet '+str(min_volume))
+        self.scope.do_command('CH1:SCAle '+str(self.pk2pk/4))
         self.scope.do_command('ACQuire:STOPAfter SEQuence')
         self.scope.do_command('acquire:state ON')
         self.check_single_state() # check while loop
@@ -284,8 +288,8 @@ class Auto_trig():
     
     def start(self, testype):
         if testype == "Regulation" :
-            #scale_list = ["400E-3", "40E-3", "400E-6", "40E-6"]
-            scale_list = ["400E-3", "40E-6"]
+            scale_list = ["400E-3", "40E-3", "400E-6", "200E-6", "40E-6"]
+            #scale_list = ["400E-3", "40E-3", "40E-6"]
             self.VISA_ADDRESS = self.VISA_ADDRESS
 
             self.setup( "1E+6")
