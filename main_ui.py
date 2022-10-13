@@ -36,6 +36,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.temperature_index = 0
         self.test_item = ["Regulation", "Load","Line","Eff"]
         self.switch_index = 0
+        self.config = {}
 
         self.set_comboBox_sheet(self.comboBox_temp, self.temperature)
 
@@ -65,7 +66,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.excel_data = []
 
         self.set_logger()
-        self.statusBar().showMessage('Started successfully.')
+        self.statusBar.showMessage('Started successfully.')
     
     def UI_default_setup(self):
         #load settings
@@ -82,6 +83,28 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.DSB_postion_CH3.setValue(float(self.settings.value("DEFaultsetup/Position_CH3")))
         self.SB_display_wavform.setValue(float(self.settings.value("DEFaultsetup/Display_Wavform")))
         self.SB_display_graticule.setValue(float(self.settings.value("DEFaultsetup/Display_Graticule")))
+
+    def set_config(self):
+        self.config = {
+            "Time Scale": self.lineEdit_time_scale.text(),
+            "Display wavfrom": self.SB_display_wavform.value(),
+            "Display graticule": self.SB_display_graticule.value(),
+            "Channel 1":{
+                    "Voltage Scale":self.DSB_V_Scale_CH1.value(),
+                    "OFFSet":self.DSB_offset_CH1.value(),
+                    "Position":self.DSB_postion_CH1.value()
+                },
+            "Channel 2":{
+                    "Voltage Scale":self.DSB_V_Scale_CH2.value(),
+                    "OFFSet":self.DSB_offset_CH2.value(),
+                    "Position":self.DSB_postion_CH2.value()
+                },
+            "Channel 3":{
+                    "Voltage Scale":self.DSB_V_Scale_CH3.value(),
+                    "OFFSet":self.DSB_offset_CH3.value(),
+                    "Position":self.DSB_postion_CH3.value()
+                }
+        }
 
     def set_logger(self):
         now = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -153,16 +176,21 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
             self.setup_timestamp()
             self.check_folder()
         self.switch_index = 0
-        self.statusBar().showMessage('Load excel : {}'.format(self.test_item[0]))
+        self.statusBar.showMessage('Load excel : {}'.format(self.test_item[0]))
         self.load_excel(self.test_item[0])
         self.autotest()
     
     def autotest(self):
+        #self.set_config()
         self.thread = Runthread()
         self.thread.testype = self.test_item[self.switch_index]
         self.thread.TK_VISA_ADDRESS = self.comboBox_TK_visa.currentText()
         self.thread.PW_VISA_ADDRESS = self.comboBox_PS_visa.currentText()
         self.thread.LD_VISA_ADDRESS = self.comboBox_EL_visa.currentText()
+        self.thread.time_scale = self.lineEdit_time_scale.text()
+        self.thread.display_wavform = self.SB_display_wavform.value()
+        self.thread.display_graticule = self.SB_display_graticule.value()
+        #self.thread.config = self.config
         self.thread.excel_data = self.excel_data
         self.thread.timestamp = self.timestamp
         self.thread.temperature_index = self.temperature_index
@@ -170,7 +198,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread._device_info.connect(self.set_device_info)
         self.thread._stop_signal.connect(self.switch_table)
         self.thread.start()
-        self.statusBar().showMessage('{} Thread Runing ...'.format(self.test_item[self.switch_index]))
+        self.statusBar.showMessage('{} Thread Runing ...'.format(self.test_item[self.switch_index]))
     
     def set_device_info(self, msg):
         self.label_Oc_name_2.setText(msg[0])
@@ -214,7 +242,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
             self.thread_autoreport.Templatepath = self.lineEdit_template.text()
             self.thread_autoreport.testplan_path = self.lineEdit_testplan.text()
             self.thread_autoreport.start()
-            self.statusBar().showMessage('Auto Report Thread Runing ...')
+            self.statusBar.showMessage('Auto Report Thread Runing ...')
         except Exception as e:
             logging.error(e)
 

@@ -32,6 +32,7 @@ class DPO4000_visa():
 
     def do_command(self, command):
         try:
+            time.sleep(0.2)
             self.KsInfiniiumScope.write("%s" % command)
             logging.info(command + " - Execute the Command Successfully ")
         except Exception: 
@@ -40,6 +41,7 @@ class DPO4000_visa():
     
     def do_query(self, command):
         try:
+            time.sleep(0.2)
             logging.info(command + " - Execute the Command Successfully ")
             return self.KsInfiniiumScope.query("%s" % command).strip()
         except Exception: 
@@ -48,6 +50,7 @@ class DPO4000_visa():
 
     def get_raw(self):
         try:
+            time.sleep(0.2)
             self.do_command('CURVE?')
             logging.info("CURVE? - Execute the Command Successfully ")
             return self.KsInfiniiumScope.read_raw()
@@ -57,6 +60,7 @@ class DPO4000_visa():
     
     def read_raw(self):
         try:
+            time.sleep(0.2)
             return self.KsInfiniiumScope.read_raw()
         except Exception: 
             logging.error("read_raw() - Execute the Command Faill !")
@@ -64,6 +68,7 @@ class DPO4000_visa():
 
     def close(self):
         try:
+            time.sleep(0.2)
             self.KsInfiniiumScope.close()
             self.rm.close()
         except Exception as e:

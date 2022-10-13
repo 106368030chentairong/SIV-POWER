@@ -48,6 +48,11 @@ class Runthread(QtCore.QThread):
 
         self.image_index = None
 
+        #self.time_scale = None
+        #self.display_wavform = None
+        #self.display_graticule = None
+        self.config = None
+
     def run(self):
         try:
             get_info_obj = get_info()
@@ -99,6 +104,10 @@ class Runthread(QtCore.QThread):
             # Auto trig
             auto_scope = Auto_trig()
             auto_scope.VISA_ADDRESS = self.TK_VISA_ADDRESS
+            auto_scope.normal_scale = self.time_scale
+            auto_scope.display_wavform = self.display_wavform
+            auto_scope.display_graticule = self.display_graticule
+            #auto_scope.config = self.config
             auto_scope.start(testype)
 
             # set up measure items & get values

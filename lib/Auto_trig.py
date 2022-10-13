@@ -1,3 +1,5 @@
+from cmath import log
+import logging
 import time
 import numpy as np
 from struct import unpack
@@ -12,6 +14,7 @@ from lib.tektronix_4000 import DPO4000_visa
 
 class Auto_trig():
     def __init__(self):
+        self.config = None
         self.VISA_ADDRESS = None
         self.scope = None
         #self.record_length = None
@@ -23,7 +26,10 @@ class Auto_trig():
         self.check_frq_num = 0
         self.check_trig_num = 0
         self.Output_Voltage = 20
-    
+
+        self.display_wavform = 99
+        self.display_graticule = 99
+
     def check_stack_dif(self):
         max_index = 0
         mini_index = 0
@@ -59,19 +65,22 @@ class Auto_trig():
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
         self.scope.connect()
         #self.scope.do_command('FPAnel:PRESS DEFaultsetup')
-        self.scope.do_command('DISplay:INTENSITy:WAVEform 99')
-        self.scope.do_command('DISplay:INTENSITy:GRAticule 80')
+        self.scope.do_command('FPAnel:PRESS DEFaultsetup')
+        self.scope.do_command('FPAnel:PRESS MENUOff')
+        self.scope.do_command('DISplay:INTENSITy:WAVEform '+str(self.display_wavform))
+        self.scope.do_command('DISplay:INTENSITy:GRAticule '+str(self.display_graticule))
         self.scope.do_command('HORizontal:RECOrdlength '+ str(record_length))
         self.scope.do_command('FPAnel:PRESS MENUOff')
         self.scope.do_command('SELECT:CH1 ON')
         self.scope.do_command('SELECT:CH2 OFF')
         self.scope.do_command('SELECT:CH3 ON')
         self.scope.do_command('SELECT:CH3 ON')
+        self.scope.do_command('HORizontal:SAMPLERate 100e6')
         #Default settings for CH
-        self.scope.do_command('CH1:POSition 1') #Default position is CH1
+        self.scope.do_command('CH1:POSition -2') #Default position is CH1
         self.scope.do_command('CH3:POSition -2') #Default position is CH3
         self.scope.do_command('CH1:OFFSet 0') #Default offset is CH1
-        self.scope.do_command('CH1:SCAle 5') #Default value for voltage
+        self.scope.do_command('CH1:SCAle 2') #Default value for voltage
         self.scope.do_command('CH3:SCALe 1') #Default value for current
         self.scope.close()
 
@@ -89,8 +98,8 @@ class Auto_trig():
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
         self.scope.connect()
 
-        channel_list = [1,1,1,1,1]
-        MEASUrement_Type = ["MAXimum","MINImum","MAXimum","MINImum","FREQuency"]
+        channel_list = [1,1,1,1,1,1]
+        MEASUrement_Type = ["MAXimum","MINImum","MAXimum","MINImum","FREQuency","pk2pk"]
 
         for i in range(8):
             self.scope.do_command('MEASUrement:MEAS'+str(i+1)+':STATE OFF')
@@ -98,8 +107,8 @@ class Auto_trig():
             self.scope.do_command('MEASUrement:MEAS'+str(i+1)+':SOURCE1 CH'+str(channel_list[i]))
             self.scope.do_command('MEASUrement:MEAS'+str(i+1)+':TYPe '+ MEASUrement_Type[i])
             self.scope.do_command('MEASUrement:MEAS'+str(i+1)+':STATE ON')
-            time.sleep(3)
-            self.Output_Voltage = float(self.scope.do_query('MEASUrement:MEAS1:VALue?'))
+        time.sleep(3)
+        self.Output_Voltage = float(self.scope.do_query('MEASUrement:MEAS1:VALue?'))
 
         self.scope.close()
 
@@ -139,15 +148,27 @@ class Auto_trig():
         self.scope.connect()
 
         self.scope.close()'''
+
+    def Auto_cale(self, pk2pk):
+        pk2pk_A = float(self.scope.do_query('MEASUrement:MEAS6:VALue?'))
+        self.scope.do_command('CH1:SCAle '+str(pk2pk/2))
+        time.sleep(10)
+        pk2pk_B = float(self.scope.do_query('MEASUrement:MEAS6:VALue?'))
+
+        if pk2pk_A < pk2pk_B*1.1 and pk2pk_A > pk2pk_B*0.9:
+            return pk2pk
+        else:
+            return self.Auto_cale(pk2pk_B)
     
     def get_rawdata(self, channel, scale):
         self.scope = DPO4000_visa()
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
         self.scope.connect()
-        
+        self.scope.do_command('AUTOSet EXECute')
+        time.sleep(2)
         self.scope.do_command('CH'+str(channel)+':BANdwidth 20E+6')
-        self.scope.do_command('CH1:OFFSet 0')
-        self.scope.do_command('CH1:SCAle 5')
+        ##self.scope.do_command('CH1:OFFSet 0')
+        ##self.scope.do_command('CH1:SCAle 2')
         self.scope.do_command('HORIZONTAL:SCALE '+str(scale))
 
         self.scope.do_command('TRIGger:A:EDGE:SOUrce CH'+str(channel))
@@ -163,55 +184,62 @@ class Auto_trig():
         
         self.scope.do_command('ACQuire:STOPAfter SEQuence')
         self.scope.do_command('acquire:state ON')
-        self.check_single_state() # check while loop
+        self.check_single_state() # check state off while loop
 
         ymult = float(self.scope.do_query('WFMPRE:YMULT?'))
         yzero = float(self.scope.do_query('WFMPRE:YZERO?'))
         yoff = float(self.scope.do_query('WFMPRE:YOFF?'))
         xincr = float(self.scope.do_query('WFMPRE:XINCR?'))
+
+        print("{} {} {} {}".format(ymult, yoff, xincr, yoff))
         
         self.check_frq_num = 0
         self.frequency = self.get_frequency()
-            
+        
+        # Get raw data
         raw_data = self.scope.get_raw()
         headerlen = 2 + int(raw_data[1])
         header = raw_data[:headerlen]
         ADC_wave_ch1 = raw_data[headerlen:-1]
-
         ADC_wave_ch1 = np.array(unpack('%sB' % len(ADC_wave_ch1),ADC_wave_ch1))
-
         Volts = (ADC_wave_ch1 - yoff) * ymult  + yzero
 
+        # Calculate the adjustment ratio
         max_volume = max(Volts)
         min_volume = min(Volts)
         self.trig_level = ((max_volume-min_volume)/2) +min_volume
         self.pk2pk = abs(max_volume - min_volume)
+        self.pk2pk_OS = float(self.scope.do_query('MEASUrement:MEAS6:VALue?'))
         self.stack_p2p.append(abs(max_volume - min_volume))
 
-        print("get_rawdata() function : {} {} {}".format(self.trig_level,self.pk2pk,self.stack_p2p))
+        print("get_rawdata() function : {} {} {} {}".format(self.trig_level,self.pk2pk,self.pk2pk_OS,self.stack_p2p))
+        #SCAle = self.Auto_cale(self.pk2pk/2)
 
-        self.scope.do_command('CH1:OFFSet '+str(min_volume))
-        self.scope.do_command('CH1:SCAle '+str(self.pk2pk/4))
+        self.scope.do_command('CH1:OFFSet '+str(self.trig_level))
+        self.scope.do_command('CH1:SCAle '+str(self.pk2pk/2))
         self.scope.do_command('ACQuire:STOPAfter SEQuence')
         self.scope.do_command('acquire:state ON')
         self.check_single_state() # check while loop
-        
+        self.scope.do_command('CH1:POSition 1')
+
         print("PK2PK : "+ str( self.pk2pk ))
         print("satck PK2PK :"+str( self.stack_p2p ))
         print("frequency : "+str(self.frequency))
         print("-"*10)
         Time = np.arange(0, xincr * len(Volts), xincr)
-
+        
         self.scope.close()
 
         #self.save_np([Volts, Time])
         return Volts, Time
 
     def find_timedif(self, Rawdata, Time, scale):
-        delta = 1
+        delta = 0.8
         #avg = 0.04
         #print((avg)*delta)
-
+        #plt.plot(Rawdata)
+        #plt.savefig('Rawdata.png')
+        logging.debug(str((self.trig_level)*delta))
         tmp = []
         for index, val in enumerate(Rawdata):
             if val >= (self.trig_level)*delta:
@@ -223,7 +251,7 @@ class Auto_trig():
             if index < len(tmp)-1:
                 #print(tmp[index+1][0] - val[0])
                 time_dif = Time[tmp[index+1][0] ]- Time[val[0]]
-                if (abs(time_dif)) >= scale*0.1:
+                if (abs(time_dif)) >= scale*0.02:
                     #print(time_dif)
                     pk2pk_time.append([time_dif, [val[0], val[1]], [tmp[index+1][0], tmp[index+1][1]]])
                     avg_dif_time.append(time_dif)
@@ -260,8 +288,8 @@ class Auto_trig():
         self.scope.connect()
 
         #self.scope.do_command('FPAnel:PRESS DEFaultsetup')
-        self.scope.do_command('DISplay:INTENSITy:WAVEform 90')
-        self.scope.do_command('DISplay:INTENSITy:GRAticule 80')
+        self.scope.do_command('DISplay:INTENSITy:WAVEform '+str(self.display_wavform))
+        self.scope.do_command('DISplay:INTENSITy:GRAticule '+str(self.display_graticule))
         self.scope.do_command('HORizontal:RECOrdlength 1E+6')
         self.scope.do_command('FPAnel:PRESS MENUOff')
         self.scope.do_command('SELECT:CH1 ON')
@@ -289,7 +317,7 @@ class Auto_trig():
     def start(self, testype):
         if testype == "Regulation" :
             scale_list = ["400E-3", "40E-3", "400E-6", "200E-6", "40E-6"]
-            #scale_list = ["400E-3", "40E-3", "40E-6"]
+            #scale_list = ["400E-3", "40E-6"]
             self.VISA_ADDRESS = self.VISA_ADDRESS
 
             self.setup( "1E+6")

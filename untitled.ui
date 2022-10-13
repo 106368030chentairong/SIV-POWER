@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1505</width>
-    <height>818</height>
+    <height>815</height>
    </rect>
   </property>
   <property name="font">
@@ -17,7 +17,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>AutoTrigger V0.2</string>
+   <string>AutoTrigger V0.1.4</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -923,6 +923,13 @@
                </property>
               </widget>
              </item>
+             <item row="1" column="1">
+              <widget class="Line" name="line_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
              <item row="4" column="1">
               <layout class="QHBoxLayout" name="horizontalLayout_5">
                <item>
@@ -1196,7 +1203,7 @@
                   </size>
                  </property>
                  <property name="text">
-                  <string>Time Scale：</string>
+                  <string>Default Time Scale：</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -1211,13 +1218,6 @@
                 </widget>
                </item>
               </layout>
-             </item>
-             <item row="1" column="1">
-              <widget class="Line" name="line_2">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-              </widget>
              </item>
             </layout>
            </widget>
