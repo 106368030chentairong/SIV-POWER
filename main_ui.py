@@ -16,6 +16,7 @@ from untitled import *
 # import from lib 
 from lib.logcolors import bcolors
 from lib.Thread_lib import Runthread
+from lib.Thread_FFT_lib import Runthread_FFT
 from lib.Autoreport import Autoreport_Runthread
 from lib.Manual_thread_lib import Manual_Runthread
 from lib.log_lib import *
@@ -62,6 +63,8 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_RUN.clicked.connect(self.btn_run)
         self.pushButton_Cancel.clicked.connect(self.thread_stop)
         #self.pushButton_Cancel.clicked.connect(self.close)
+
+        self.pushButton_FF_Autotesting.clicked.connect(self.FFT_autotesting)
 
         self.excel_data = []
 
@@ -200,6 +203,11 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread.start()
         self.statusBar.showMessage('{} Thread Runing ...'.format(self.test_item[self.switch_index]))
     
+    def FFT_autotesting(self):
+        self.thread = Runthread_FFT()
+        self.thread.lineEdit_scale_period = self.lineEdit_scale_period.text()
+        self.thread.start()
+
     def set_device_info(self, msg):
         self.label_Oc_name_2.setText(msg[0])
         self.label_PS_name_2.setText(msg[1])

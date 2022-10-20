@@ -1222,6 +1222,36 @@
             </layout>
            </widget>
           </item>
+          <item row="3" column="1">
+           <widget class="QGroupBox" name="groupBox_FFT">
+            <property name="title">
+             <string>FFT Default Setting</string>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_21">
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="gridLayout_20">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string>Every scale period：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="lineEdit_scale_period"/>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="0">
+              <widget class="QPushButton" name="pushButton_FF_Autotesting">
+               <property name="text">
+                <string>Autotesting</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
          </layout>
         </item>
        </layout>
