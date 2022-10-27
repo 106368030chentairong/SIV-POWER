@@ -106,7 +106,8 @@ class TextHandler(logging.StreamHandler):
             if self._callback:
                 msg = self.format(record)
                 self._callback(str(msg))
-        except Exception:
+        except Exception as e:
+            print(e)
             pass
 def add_text_handler(callback=None):
     """Add TextHandler to specific logger, to output log messages to 
@@ -121,5 +122,6 @@ def add_text_handler(callback=None):
         text_handler.setFormatter(formatter)
         text_handler.setLevel(logging.DEBUG)
         slot_logger.addHandler(text_handler)
-    except Exception:
+    except Exception as e:
+        print(e)
         pass

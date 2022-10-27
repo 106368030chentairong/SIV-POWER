@@ -42,7 +42,7 @@ class auto_FFT_test:
         if state == '1':
             if self.check_trig_num >= 20:
                 time.sleep(1)
-                self.scope.write('FPAnel:PRESS FORCetrig')
+                self.do_command('FPAnel:PRESS FORCetrig')
                 time.sleep(1)
                 self.check_single_state()
 
@@ -59,40 +59,40 @@ class auto_FFT_test:
         self.scope.timeout = 10000
 
         # Reset the oscilloscope
-        self.scope.write('FPAnel:PRESS DEFaultsetup')
-        self.scope.write('FPAnel:PRESS MENUOff')
-        self.scope.write('HORizontal:RECOrdlength 10E+3')
+        self.do_command('FPAnel:PRESS DEFaultsetup')
+        self.do_command('FPAnel:PRESS MENUOff')
+        self.do_command('HORizontal:RECOrdlength 10E+3')
 
         time.sleep(2)
-        self.scope.write('AUTOSet EXECute')
+        self.do_command('AUTOSet EXECute')
         time.sleep(2)
 
         # Default Triger setup
-        self.scope.write('CH1:BANdwidth 20E+6')
-        self.scope.write('TRIGger:A:EDGE:SOUrce CH1')
-        self.scope.write('TRIGger:A:TYPe EDGe')
-        self.scope.write('TRIGger:A:MODe AUTO')
-        self.scope.write('TRIGger:A:EDGE:COUPling DC')
-        self.scope.write('TRIGger:A:EDGE:SLOpe FALL')
+        self.do_command('CH1:BANdwidth 20E+6')
+        self.do_command('TRIGger:A:EDGE:SOUrce CH1')
+        self.do_command('TRIGger:A:TYPe EDGe')
+        self.do_command('TRIGger:A:MODe AUTO')
+        self.do_command('TRIGger:A:EDGE:COUPling DC')
+        self.do_command('TRIGger:A:EDGE:SLOpe FALL')
 
         for i in range(8):
-            self.scope.write('MEASUrement:MEAS'+str(i+1)+':STATE OFF')
+            self.do_command('MEASUrement:MEAS'+str(i+1)+':STATE OFF')
 
         channel_list = [1,1,1,1,1]
         MEASUrement_Type = ["MAXimum","MINImum","MEAN","FREQuency","pk2pk"]
 
         for i in range(8):
-            self.scope.write('MEASUrement:MEAS'+str(i+1)+':STATE OFF')
+            self.do_command('MEASUrement:MEAS'+str(i+1)+':STATE OFF')
         for i in range(len(MEASUrement_Type)):
-            self.scope.write('MEASUrement:MEAS'+str(i+1)+':SOURCE1 CH'+str(channel_list[i]))
-            self.scope.write('MEASUrement:MEAS'+str(i+1)+':TYPe '+ MEASUrement_Type[i])
-            self.scope.write('MEASUrement:MEAS'+str(i+1)+':STATE ON')
+            self.do_command('MEASUrement:MEAS'+str(i+1)+':SOURCE1 CH'+str(channel_list[i]))
+            self.do_command('MEASUrement:MEAS'+str(i+1)+':TYPe '+ MEASUrement_Type[i])
+            self.do_command('MEASUrement:MEAS'+str(i+1)+':STATE ON')
 
         for index in range(3):
             print("{}{}{}".format("-"*50,index,"-"*50))
             time.sleep(1)
-            self.scope.write('ACQuire:STOPAfter SEQuence')
-            self.scope.write('acquire:state ON')
+            self.do_command('ACQuire:STOPAfter SEQuence')
+            self.do_command('acquire:state ON')
             self.check_single_state()
             
             CH1_MAX_VALue = float(self.do_query('MEASUrement:MEAS1:VALue?'))
@@ -101,40 +101,40 @@ class auto_FFT_test:
             CH1_AMPlitude_VALue = float(self.do_query('MEASUrement:MEAS5:VALue?'))
             offset_value = ((CH1_MAX_VALue-CH1_MINI_VALue)/2)+CH1_MINI_VALue
             Scale_value = CH1_AMPlitude_VALue/2
-            self.scope.write('CH1:BANdwidth 20E+6')
-            self.scope.write('CH1:OFFSet {}'.format(offset_value))
-            self.scope.write('CH1:SCAle {}'.format(Scale_value))
+            self.do_command('CH1:BANdwidth 20E+6')
+            self.do_command('CH1:OFFSet {}'.format(offset_value))
+            self.do_command('CH1:SCAle {}'.format(Scale_value))
 
             print("OffSet：{}, Scale：{}".format(offset_value, Scale_value))
 
-            self.scope.write('TRIGger:A:EDGE:SOUrce CH1')
-            self.scope.write('TRIGger:A SETLevel {}'.format(offset_value))
-            self.scope.write('TRIGger:A:MODe AUTO')
+            self.do_command('TRIGger:A:EDGE:SOUrce CH1')
+            self.do_command('TRIGger:A SETLevel {}'.format(offset_value))
+            self.do_command('TRIGger:A:MODe AUTO')
 
-            self.scope.write('ACQuire:STOPAfter SEQuence')
-            self.scope.write('acquire:state ON')
-            self.scope.write('SELECT:MATH ON')
-            self.scope.write("MATH:TYPE FFT")
+            self.do_command('ACQuire:STOPAfter SEQuence')
+            self.do_command('acquire:state ON')
+            self.do_command('SELECT:MATH ON')
+            self.do_command("MATH:TYPE FFT")
             self.check_single_state()
 
         time.sleep(1)
-        self.scope.write('SELECT:MATH ON')
-        self.scope.write("MATH:TYPE FFT")
-        self.scope.write("MATH:VERTical:POSition 3")
+        self.do_command('SELECT:MATH ON')
+        self.do_command("MATH:TYPE FFT")
+        self.do_command("MATH:VERTical:POSition 3")
         #scope.write("MATH:HORizontal:POSition {}".format(frqY/(xincr * len(Volts_ch1))*99))
         #scope.write("MATH:HORizontal:SCAle {}".format(frqY/20))
         time.sleep(10)
 
-        self.scope.write('CH1:POSition 1')
-        self.scope.write('HORIZONTAL:SCALE '+str(horizontal_scale))
-        self.scope.write('ACQuire:STOPAfter SEQuence')
-        self.scope.write('acquire:state ON')
+        self.do_command('CH1:POSition 1')
+        self.do_command('HORIZONTAL:SCALE '+str(horizontal_scale))
+        self.do_command('ACQuire:STOPAfter SEQuence')
+        self.do_command('acquire:state ON')
         self.check_single_state()
 
         #time.sleep(3+horizontal_scale*20)
-        self.scope.write('DATA:SOU MATH')
-        self.scope.write('DATA:WIDTH 1')
-        self.scope.write('DATA:ENC RPB')
+        self.do_command('DATA:SOU MATH')
+        self.do_command('DATA:WIDTH 1')
+        self.do_command('DATA:ENC RPB')
 
         ymult = float(self.do_query('WFMPRE:YMULT?'))
         yzero = float(self.do_query('WFMPRE:YZERO?'))
@@ -143,7 +143,7 @@ class auto_FFT_test:
 
         print("ymult：{}, yzero：{}, yoff：{}, xincr：{}".format(ymult, yzero, yoff, xincr))
 
-        self.scope.write('CURVE?')
+        self.do_command('CURVE?')
         data_ch1 = self.scope.read_raw()
         #headerlen = 1 + int(data_ch1[1])
         #header = data_ch1[:headerlen]
@@ -180,19 +180,19 @@ class auto_FFT_test:
     
     def plot_FFT(self,savename, shape, VOLTage, test_item ):
         pylab.cla()
-        pylab.figure(figsize=(9, 4), dpi=1200)
-        pylab.title('Oscilloscope FFT - Shape : {}'.format(shape), y=-0.01, loc='left')
+        pylab.figure(figsize=(18, 8), dpi=1200)
+        pylab.title('Oscilloscope FFT - Shape : {}'.format(shape), y=-0.01)
         pylab.ylabel('Voltage (dBV)')
 
         for Poin in self.poin_list:
             if Poin[1] >= -60:
                 pylab.plot(Poin[0], Poin[1], 'r.', markersize=8)
-                pylab.annotate("%.1f,%.1gHz" %(Poin[1], Poin[0]),(Poin[0], Poin[1]), rotation=30)
+                pylab.annotate("%.1fdBV , %.1gHz" %(Poin[1], Poin[0]),(Poin[0], Poin[1]), rotation=20)
 
         pylab.xlabel('Time')
         legend_list = []
         for index, tmp_data in enumerate(self.data):
-            pylab.plot(tmp_data[1][:], tmp_data[0][:],linewidth = 0.5,alpha = 0.8, label="%sV, %.2gHz, %.2g/div" %(VOLTage,test_item[index][0],test_item[index][1]))
+            pylab.plot(tmp_data[1][:], tmp_data[0][:],linewidth = 0.8,alpha = 0.8, label="%sV, %.2gHz, %.2g/div" %(VOLTage,test_item[index][0],test_item[index][1]))
             #legend_list.append(data)
         pylab.legend(loc ="lower right")
         #pylab.plot(Time, data_3)
@@ -200,6 +200,7 @@ class auto_FFT_test:
         pylab.grid('on')
         pylab.savefig(savename + '.png')
         pylab.cla()
+
 
 nowTime = int(time.time())
 struct_time = time.localtime(nowTime)

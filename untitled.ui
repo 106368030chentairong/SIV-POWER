@@ -1230,15 +1230,33 @@
             <layout class="QGridLayout" name="gridLayout_21">
              <item row="0" column="0">
               <layout class="QGridLayout" name="gridLayout_20">
-               <item row="0" column="0">
+               <item row="1" column="0">
                 <widget class="QLabel" name="label_5">
                  <property name="text">
                   <string>Every scale period：</string>
                  </property>
                 </widget>
                </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="lineEdit_scale_period">
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>Default scale：</string>
+                 </property>
+                </widget>
+               </item>
                <item row="0" column="1">
-                <widget class="QLineEdit" name="lineEdit_scale_period"/>
+                <widget class="QLineEdit" name="lineEdit_FFT_scale">
+                 <property name="text">
+                  <string>1000</string>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>

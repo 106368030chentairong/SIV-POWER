@@ -28,47 +28,43 @@ class DPO4000_visa():
                 self.connect()
             else:
                 logging.error(self.VISA_ADDRESS + " - Not Connected !")
-                pass
 
     def do_command(self, command):
         try:
-            time.sleep(0.2)
+            time.sleep(0.1)
             self.KsInfiniiumScope.write("%s" % command)
             logging.info(command + " - Execute the Command Successfully ")
         except Exception: 
             logging.error(command + " - Execute the Command Faill !")
-            pass
     
     def do_query(self, command):
         try:
-            time.sleep(0.2)
+            time.sleep(0.1)
             logging.info(command + " - Execute the Command Successfully ")
             return self.KsInfiniiumScope.query("%s" % command).strip()
         except Exception: 
             logging.error(command + " - Execute the Command Faill !")
-            pass
 
     def get_raw(self):
         try:
-            time.sleep(0.2)
+            time.sleep(0.1)
             self.do_command('CURVE?')
             logging.info("CURVE? - Execute the Command Successfully ")
             return self.KsInfiniiumScope.read_raw()
         except Exception: 
             logging.error("CURVE? - Execute the Command Faill !")
-            pass
+
     
     def read_raw(self):
         try:
-            time.sleep(0.2)
+            time.sleep(0.1)
             return self.KsInfiniiumScope.read_raw()
         except Exception: 
             logging.error("read_raw() - Execute the Command Faill !")
-            pass
 
     def close(self):
         try:
-            time.sleep(0.2)
+            time.sleep(0.1)
             self.KsInfiniiumScope.close()
             self.rm.close()
         except Exception as e:

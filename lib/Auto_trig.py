@@ -164,6 +164,7 @@ class Auto_trig():
         self.scope = DPO4000_visa()
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
         self.scope.connect()
+        
         self.scope.do_command('AUTOSet EXECute')
         time.sleep(2)
         self.scope.do_command('CH'+str(channel)+':BANdwidth 20E+6')
