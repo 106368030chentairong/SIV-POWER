@@ -204,9 +204,18 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.statusBar.showMessage('{} Thread Runing ...'.format(self.test_item[self.switch_index]))
     
     def FFT_autotesting(self):
+        self.label_freq_value.setText("")
+        self.label_dBV_value.setText("")
+
         self.thread = Runthread_FFT()
         self.thread.lineEdit_scale_period = self.lineEdit_scale_period.text()
+        self.thread.Default_scale = self.lineEdit_FFT_scale.text()
+        self.thread._respones.connect(self.FFT_respones)
         self.thread.start()
+    
+    def FFT_respones(self, msg):
+        self.label_freq_value.setText("%s Hz" %(msg[0]))
+        self.label_dBV_value.setText("%s dBV" %(msg[1]))
 
     def set_device_info(self, msg):
         self.label_Oc_name_2.setText(msg[0])

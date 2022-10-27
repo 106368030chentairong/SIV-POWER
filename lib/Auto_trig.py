@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import calendar
 
 from lib.tektronix_4000 import DPO4000_visa
+from lib.Auto_FFT import Auto_FFT
 
 class Auto_trig():
     def __init__(self):
@@ -317,7 +318,7 @@ class Auto_trig():
     
     def start(self, testype):
         if testype == "Regulation" :
-            scale_list = ["400E-3", "40E-3", "400E-6", "200E-6", "40E-6"]
+            '''scale_list = ["400E-3", "40E-3", "400E-6", "200E-6", "40E-6"]
             #scale_list = ["400E-3", "40E-6"]
             self.VISA_ADDRESS = self.VISA_ADDRESS
 
@@ -341,7 +342,12 @@ class Auto_trig():
                     print(2/self.frequency)
             else:
                 self.cl_dif(self.stack_p2p)
-                self.set_scale(self.normal_scale)
+                self.set_scale(self.normal_scale)'''
+
+            thread = Auto_FFT()
+            thread.lineEdit_scale_period = 10
+            thread.Default_scale = "1E+3"
+            thread.main()
 
         elif testype == "Load":
             self.VISA_ADDRESS = self.VISA_ADDRESS
