@@ -51,6 +51,8 @@ class Runthread(QtCore.QThread):
         #self.time_scale = None
         #self.display_wavform = None
         #self.display_graticule = None
+        self.lineEdit_scale_period = None
+        self.Default_scale = None
         self.config = None
 
     def run(self):
@@ -107,6 +109,9 @@ class Runthread(QtCore.QThread):
             auto_scope.normal_scale = self.time_scale
             auto_scope.display_wavform = self.display_wavform
             auto_scope.display_graticule = self.display_graticule
+            auto_scope.lineEdit_scale_period = self.lineEdit_scale_period
+            auto_scope.Default_scale = self.Default_scale
+            auto_scope.FFT_image_path = "./Measurement data/%s/%s" %(self.timestamp, "FFT_image")
             #auto_scope.config = self.config
             auto_scope.start(testype)
 
@@ -182,8 +187,10 @@ class Runthread(QtCore.QThread):
         if self.testype != "Eff":
             judge = self.judge(result_list)
             result_list.append(judge)
-            auto_scope.get_IMAGe("./Measurement data/"+self.timestamp+"/"+ self.test_item[testype] +"_"+ str(self.temperature_index) +"_"+ self.image_index )
-            logging.info("./Measurement data/"+self.timestamp+"/"+ self.test_item[testype] +"_"+ str(self.temperature_index) +"_"+ self.image_index )
+            #auto_scope.get_IMAGe("./Measurement data/"+self.timestamp+"/"+ self.test_item[testype] +"_"+ str(self.temperature_index) +"_"+ self.image_index )
+            #logging.info("./Measurement data/"+self.timestamp+"/"+ self.test_item[testype] +"_"+ str(self.temperature_index) +"_"+ self.image_index )
+            auto_scope.get_IMAGe("./Measurement data/%s/%s_%s_%s" %(self.timestamp,self.test_item[testype],self.temperature_index,self.image_index))
+            logging.info("./Measurement data/%s/%s_%s_%s" %(self.timestamp,self.test_item[testype],self.temperature_index,self.image_index))
         return result_list
 
     def setup_rel(self, rowdata):

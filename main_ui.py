@@ -193,6 +193,8 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread.time_scale = self.lineEdit_time_scale.text()
         self.thread.display_wavform = self.SB_display_wavform.value()
         self.thread.display_graticule = self.SB_display_graticule.value()
+        self.thread.lineEdit_scale_period = self.lineEdit_scale_period.text()
+        self.thread.Default_scale = self.lineEdit_FFT_scale.text()
         #self.thread.config = self.config
         self.thread.excel_data = self.excel_data
         self.thread.timestamp = self.timestamp

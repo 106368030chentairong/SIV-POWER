@@ -31,6 +31,10 @@ class Auto_trig():
         self.display_wavform = 99
         self.display_graticule = 99
 
+        self.lineEdit_scale_period = None
+        self.Default_scale = None
+        self.FFT_image_path = None
+
     def check_stack_dif(self):
         max_index = 0
         mini_index = 0
@@ -345,8 +349,10 @@ class Auto_trig():
                 self.set_scale(self.normal_scale)'''
 
             thread = Auto_FFT()
-            thread.lineEdit_scale_period = 10
-            thread.Default_scale = "1E+3"
+            thread.VISA_ADDRESS = self.VISA_ADDRESS
+            thread.lineEdit_scale_period = self.lineEdit_scale_period
+            thread.Default_scale = self.Default_scale
+            thread.FFT_image_path = self.FFT_image_path
             thread.main()
 
         elif testype == "Load":
