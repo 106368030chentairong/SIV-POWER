@@ -243,7 +243,6 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         for row_index in range(row):
             if row_index > 0:
                 sheet_con += 1
-
                 #print(sheet_con)
                 logging.debug(str(self.tableWidget_testplan.item(row_index, 0).text()))
                 for col_index in range(col):
