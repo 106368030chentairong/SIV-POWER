@@ -687,14 +687,14 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusBar)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget_main.setCurrentIndex(1)
+        self.tabWidget_main.setCurrentIndex(0)
         self.tabWidget_detailed.setCurrentIndex(1)
         self.tabWidget_autotest.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "AutoTrigger V0.1.4"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "AutoTrigger V0.1.5"))
         self.tabWidget_detailed.setTabText(self.tabWidget_detailed.indexOf(self.tab_9), _translate("MainWindow", "Measurement Details"))
         self.tabWidget_detailed.setTabText(self.tabWidget_detailed.indexOf(self.tab), _translate("MainWindow", "Test Plan"))
         self.tabWidget_detailed.setTabText(self.tabWidget_detailed.indexOf(self.tab_2), _translate("MainWindow", "Screenshot"))
