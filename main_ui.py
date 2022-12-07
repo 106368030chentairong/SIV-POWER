@@ -210,7 +210,9 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_dBV_value.setText("")
 
         self.thread = Runthread_FFT()
+        self.thread.dBV_pass = int(self.lineEdit_dbv_threshold.text())
         self.thread.lineEdit_scale_period = self.lineEdit_scale_period.text()
+        self.thread.lineEdit_line_trig = self.lineEdit_line_trig.text()
         self.thread.Default_scale = self.lineEdit_FFT_scale.text()
         self.thread._respones.connect(self.FFT_respones)
         self.thread.start()

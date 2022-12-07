@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1505</width>
-    <height>815</height>
+    <height>818</height>
    </rect>
   </property>
   <property name="font">
@@ -17,7 +17,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>AutoTrigger V0.1.5</string>
+   <string>AutoTrigger V0.1.6</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -29,7 +29,7 @@
        </font>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="Measure_Tool">
        <attribute name="title">
@@ -1230,14 +1230,7 @@
             <layout class="QGridLayout" name="gridLayout_21">
              <item row="0" column="0">
               <layout class="QGridLayout" name="gridLayout_20">
-               <item row="1" column="1">
-                <widget class="QLineEdit" name="lineEdit_scale_period">
-                 <property name="text">
-                  <string>1</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
+               <item row="0" column="2">
                 <widget class="QLabel" name="label_5">
                  <property name="text">
                   <string>Every scale period：</string>
@@ -1255,6 +1248,41 @@
                 <widget class="QLabel" name="label_8">
                  <property name="text">
                   <string>Default scale：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QLineEdit" name="lineEdit_scale_period">
+                 <property name="text">
+                  <string>1</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_9">
+                 <property name="text">
+                  <string>dBV threshold：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="lineEdit_dbv_threshold">
+                 <property name="text">
+                  <string>-50</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="label_10">
+                 <property name="text">
+                  <string>Line Trig scale period：</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="3">
+                <widget class="QLineEdit" name="lineEdit_line_trig">
+                 <property name="text">
+                  <string>10</string>
                  </property>
                 </widget>
                </item>
@@ -1375,7 +1403,7 @@
        </font>
       </property>
       <property name="title">
-       <string>Systea Log</string>
+       <string>Systeam Log</string>
       </property>
       <layout class="QGridLayout" name="gridLayout_10">
        <item row="0" column="0">
