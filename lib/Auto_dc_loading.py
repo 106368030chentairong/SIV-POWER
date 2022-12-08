@@ -38,11 +38,11 @@ class Auto_dc_loding():
             cmd_list = ["*RST", "SHOW L" , "MODE CCH", "CURR:STAT:L1 "+str(self.CurrDynH) ]
 
         elif str(mode) == "1":
-            cmd_list = ["*RST" , "SHOW L", "MODE CCDH",
+            cmd_list = ["*RST" , "SHOW L", "MODE CCDL",
                 "CURR:DYN:L1 "+str(self.CurrDynH), "CURR:DYN:L2 "+str(self.CurrDynL),
                 "CURR:DYN:RISE 0.25", "CURR:DYN:FALL 0.25",
-                "CURR:DYN:T1 0.5", "CURR:DYN:T2 0.5"]
-
+                "CURR:DYN:T1 0.5E-3", "CURR:DYN:T2 0.5E-3"]
+        # CCDL RISE:250mA/us FALL 250mA/us T1:0.5ms T2:0.5ms
         for cmd in cmd_list :
             self.scope.do_command(cmd)
     

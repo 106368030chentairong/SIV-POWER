@@ -87,6 +87,7 @@ class Auto_trig():
         self.scope.do_command('CH1:OFFSet 0') #Default offset is CH1
         self.scope.do_command('CH1:SCAle 2') #Default value for voltage
         self.scope.do_command('CH3:SCALe 1') #Default value for current
+        self.scope.do_command('CH3:PRObe:FORCEDRange 5')
         self.scope.close()
 
     def set_scale(self, scale):
@@ -154,16 +155,53 @@ class Auto_trig():
 
         self.scope.close()'''
 
-    def Auto_cale(self, pk2pk):
-        pk2pk_A = float(self.scope.do_query('MEASUrement:MEAS6:VALue?'))
-        self.scope.do_command('CH1:SCAle '+str(pk2pk/2))
-        time.sleep(10)
-        pk2pk_B = float(self.scope.do_query('MEASUrement:MEAS6:VALue?'))
+    def Auto_cale(self, channel, div_num):
+        self.scope = DPO4000_visa()
+        self.scope.VISA_ADDRESS = self.VISA_ADDRESS
+        self.scope.connect()
 
-        if pk2pk_A < pk2pk_B*1.1 and pk2pk_A > pk2pk_B*0.9:
-            return pk2pk
-        else:
-            return self.Auto_cale(pk2pk_B)
+        self.scope.do_command('SELECT:CH1 ON')
+        self.scope.do_command('SELECT:CH2 ON')
+        self.scope.do_command('SELECT:CH3 ON')
+        self.scope.do_command('SELECT:CH3 ON')
+
+        channel_list = [channel,channel,channel,channel]
+        MEASUrement_Type = ["MAXimum","MINImum","MEAN","pk2pk"]
+
+        for i in range(len(MEASUrement_Type)):
+            self.scope.do_command('MEASUrement:MEAS'+str(i+1)+':SOURCE1 CH'+str(channel_list[i]))
+            self.scope.do_command('MEASUrement:MEAS'+str(i+1)+':TYPe '+ MEASUrement_Type[i])
+            self.scope.do_command('MEASUrement:MEAS'+str(i+1)+':STATE ON')
+
+        for index in range(3):
+            print("{}{}{}".format("-"*50,index,"-"*50))
+            time.sleep(0.1)
+            self.scope.do_command('ACQuire:STOPAfter SEQuence')
+            self.scope.do_command('acquire:state ON')
+            self.check_trig_num = 0
+            self.check_single_state()
+            
+            CH1_MAX_VALue = float(self.scope.do_query('MEASUrement:MEAS1:VALue?'))
+            CH1_MINI_VALue = float(self.scope.do_query('MEASUrement:MEAS2:VALue?'))
+            CH1_MEAN_VALue = float(self.scope.do_query('MEASUrement:MEAS3:VALue?'))
+            CH1_AMPlitude_VALue = float(self.scope.do_query('MEASUrement:MEAS4:VALue?'))
+            offset_value = ((CH1_MAX_VALue-CH1_MINI_VALue)/2)+CH1_MINI_VALue
+            Scale_value = CH1_AMPlitude_VALue/div_num
+            print(Scale_value)
+            #self.scope.do_command('CH%s:BANdwidth 20E+6' %(channel))
+            if channel != 3 :
+                self.scope.do_command('CH%s:OFFSet %s' %(channel,offset_value))
+                self.scope.do_command('CH%s:SCAle %s' %(channel,Scale_value))
+            else:
+                self.scope.do_command('CH%s:OFFSet %s' %(channel,offset_value))
+                self.scope.do_command('CH%s:SCAle %s' %(channel,div_num))
+
+            print("OffSet：{}, Scale：{}".format(offset_value, Scale_value))
+
+            self.scope.do_command('TRIGger:A:EDGE:SOUrce CH%s' %(channel))
+            self.scope.do_command('TRIGger:A SETLevel %s' %(offset_value))
+            self.scope.do_command('TRIGger:A:MODe AUTO')
+        self.scope.close()
     
     def get_rawdata(self, channel, scale):
         self.scope = DPO4000_visa()
@@ -173,6 +211,7 @@ class Auto_trig():
         self.scope.do_command('AUTOSet EXECute')
         time.sleep(2)
         self.scope.do_command('CH'+str(channel)+':BANdwidth 20E+6')
+        self.scope.do_command('CH3:PRObe:FORCEDRange 5') 
         ##self.scope.do_command('CH1:OFFSet 0')
         ##self.scope.do_command('CH1:SCAle 2')
         self.scope.do_command('HORIZONTAL:SCALE '+str(scale))
@@ -288,7 +327,14 @@ class Auto_trig():
             if pk2pk_list != []:
                 print(abs(pk2pk_list[-1] - ver_val)/pk2pk_list[-1])
 
-    def setup_trig(self, A_level, SLOpe):
+    def setup_trig(self, Voltage_1, Voltage_2):
+
+        trig_votage = ((Voltage_1 - Voltage_2)/2 ) + Voltage_2
+        if float(Voltage_1) > float(Voltage_2) :
+            SLOpe = "FALL"
+        else:
+            SLOpe = "RISe"
+
         self.scope = DPO4000_visa()
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
         self.scope.connect()
@@ -304,15 +350,15 @@ class Auto_trig():
         self.scope.do_command('CH1:POSition 2')
         self.scope.do_command('CH2:POSition 0')
         self.scope.do_command('CH3:POSition -3')
-        self.scope.do_command('CH1:OFFSet '+str(self.Output_Voltage))
-        self.scope.do_command('CH1:SCAle '+str(self.Output_Voltage))
-        self.scope.do_command('CH2:OFFSet 4')
-        self.scope.do_command('CH2:SCAle 0.4')
+        #self.scope.do_command('CH1:OFFSet '+str(self.Output_Voltage))
+        #self.scope.do_command('CH1:SCAle '+str(self.Output_Voltage))
+        self.scope.do_command('CH2:OFFSet '+str(trig_votage))
+        self.scope.do_command('CH2:SCAle '+str(abs(Voltage_1-Voltage_2)/2))
         self.scope.do_command('HORIZONTAL:SCALE 1E-3')
         
         #self.scope.do_command('acquire:state ON')
         self.scope.do_command('TRIGger:A:EDGE:SOUrce CH2')
-        self.scope.do_command('TRIGger:A:LEVel '+str(A_level))
+        self.scope.do_command('TRIGger:A:LEVel '+str(trig_votage))
         self.scope.do_command('TRIGger:A:MODe AUTO')
         self.scope.do_command('TRIGger:A:EDGE:SLOpe '+str(SLOpe))
         self.scope.do_command('TRIGger:A:EDGE:SOUrce CH2')
@@ -348,6 +394,8 @@ class Auto_trig():
                 self.cl_dif(self.stack_p2p)
                 self.set_scale(self.normal_scale)'''
 
+            self.setup( "1E+6")
+
             thread = Auto_FFT()
             thread.VISA_ADDRESS = self.VISA_ADDRESS
             thread.lineEdit_scale_period = self.lineEdit_scale_period
@@ -361,18 +409,29 @@ class Auto_trig():
             #self.scope.do_command('acquire:state ON')
             self.setup("1E+6")
             self.set_measurement()
-            Volts, Time = self.get_rawdata( 1, "0.5")
+            Volts, Time = self.get_rawdata( 1, "1E-3")
             #self.scope.do_command('HORIZONTAL:SCALE 0.5')
             #self.scope.do_command('acquire:state ON')
             #self.check_single_state() # check while loop
         
         elif testype == "Line":
-            self.VISA_ADDRESS = self.VISA_ADDRESS
             self.setup("1E+6")
 
-            #self.set_measurement()
-            #self.set_scale(self.normal_scale)
-            #self.scope.do_command('CH1:OFFSet 2.5')
-            #self.scope.do_command('CH1:SCAle 0.5')
+            self.scope = DPO4000_visa()
+            self.scope.VISA_ADDRESS = self.VISA_ADDRESS
+            self.scope.connect()
+            self.scope.do_command('FPAnel:PRESS DEFaultsetup')
+            self.scope.do_command('FPAnel:PRESS MENUOff')
+        
+            self.scope.do_command('CH3:PRObe:FORCEDRange 5')
+            
+            self.scope.do_command('DISplay:INTENSITy:WAVEform '+str(self.display_wavform))
+            self.scope.do_command('DISplay:INTENSITy:GRAticule '+str(self.display_graticule))
+            self.scope.do_command('HORizontal:RECOrdlength 10E+3')
+
+            self.scope.do_command('AUTOSet EXECute')
+            time.sleep(2)
+
+            self.scope.close()
 
         print('Done!')

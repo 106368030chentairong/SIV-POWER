@@ -122,9 +122,7 @@ class Runthread(QtCore.QThread):
             result_list = measure_scope.get_value()
 
         elif testype == "Line" :
-            auto_scope = Auto_trig()
-            auto_scope.VISA_ADDRESS = self.TK_VISA_ADDRESS
-            auto_scope.start("Line")
+
 
             load_scope = Auto_dc_loding()
             load_scope.PW_VISA_ADDRESS = self.PW_VISA_ADDRESS
@@ -132,26 +130,30 @@ class Runthread(QtCore.QThread):
 
             # setup Hight level
             load_scope.PW_setup(self.Voltage_1)
-            time.sleep(2)
 
             # Setup loading Curr
             load_scope.CurrDynH  = self.CurrDynH
             load_scope.LD_setup(0)
 
-            if float(self.Voltage_1) > float(self.Voltage_2) :
+            auto_scope = Auto_trig()
+            auto_scope.VISA_ADDRESS = self.TK_VISA_ADDRESS
+            auto_scope.start("Line")
+            auto_scope.Auto_cale(1, 1) 
+            auto_scope.Auto_cale(3, 1)
+
+            '''if float(self.Voltage_1) > float(self.Voltage_2) :
                 SLOpe = "FALL"
             else:
-                SLOpe = "RISe"
-            trig_votage = ((float(self.Voltage_1) - float(self.Voltage_2))/2 ) + float(self.Voltage_2)
+                SLOpe = "RISe"'''
+            #trig_votage = ((float(self.Voltage_1) - float(self.Voltage_2))/2 ) + float(self.Voltage_2)
             
             #trig_votage = str(trigger_level)
 
             # Setup Trig level
-            time.sleep(2)
-            logging.info(SLOpe)
-            logging.info("trig votage :"+ str(trig_votage))
-            auto_scope.setup_trig(str(trig_votage) , SLOpe) #  {RISe|FALL}
-
+            #logging.info(SLOpe)
+            #logging.info("trig votage :"+ str(trig_votage))
+            #auto_scope.setup_trig(str(trig_votage) , SLOpe) #  {RISe|FALL}
+            auto_scope.setup_trig(float(self.Voltage_1), float(self.Voltage_2))
             # setup Low level
             time.sleep(2)
             load_scope.PW_setup(self.Voltage_2)

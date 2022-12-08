@@ -706,7 +706,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "AutoTrigger V0.1.6"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "AutoTrigger V0.1.7"))
         self.tabWidget_detailed.setTabText(self.tabWidget_detailed.indexOf(self.tab_9), _translate("MainWindow", "Measurement Details"))
         self.tabWidget_detailed.setTabText(self.tabWidget_detailed.indexOf(self.tab), _translate("MainWindow", "Test Plan"))
         self.tabWidget_detailed.setTabText(self.tabWidget_detailed.indexOf(self.tab_2), _translate("MainWindow", "Screenshot"))
@@ -759,7 +759,7 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "Every scale period："))
         self.lineEdit_FFT_scale.setText(_translate("MainWindow", "1E-3"))
         self.label_8.setText(_translate("MainWindow", "Default scale："))
-        self.lineEdit_scale_period.setText(_translate("MainWindow", "1"))
+        self.lineEdit_scale_period.setText(_translate("MainWindow", "10"))
         self.label_9.setText(_translate("MainWindow", "dBV threshold："))
         self.lineEdit_dbv_threshold.setText(_translate("MainWindow", "-50"))
         self.label_10.setText(_translate("MainWindow", "Line Trig scale period："))

@@ -17,7 +17,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>AutoTrigger V0.1.6</string>
+   <string>AutoTrigger V0.1.7</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -1254,7 +1254,7 @@
                <item row="0" column="3">
                 <widget class="QLineEdit" name="lineEdit_scale_period">
                  <property name="text">
-                  <string>1</string>
+                  <string>10</string>
                  </property>
                 </widget>
                </item>
