@@ -9,6 +9,7 @@ from colorama import Fore, Back, Style
 
 import pyvisa as visa
 from openpyxl import load_workbook, Workbook
+from openpyxl.utils import column_index_from_string
 
 # UI/UX 
 from untitled import *
@@ -20,7 +21,7 @@ from lib.Thread_FFT_lib import Runthread_FFT
 from lib.Autoreport import Autoreport_Runthread
 from lib.Manual_thread_lib import Manual_Runthread
 from lib.log_lib import *
-from lib.upload_too import Upload_Runthread
+from lib.upload_tool import Upload_Runthread
 
 class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
@@ -28,16 +29,16 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.UI_default_setup()
 
-        self.timestamp = None
-        self.wb = None
-        self.continue_single = 0
+        self.timestamp          = None
+        self.wb                 = None
+        self.continue_single    = 0
 
-        self.temperature = ["-20", "25", "50"]
+        self.temperature            = ["-20", "25", "50"]
         self.temperature_index_list = {"-20":0, "25":1, "50":2}
-        self.temperature_index = 0
-        self.test_item = ["Regulation", "Load","Line","Eff"]
-        self.switch_index = 0
-        self.config = {}
+        self.temperature_index      = 0
+        self.test_item              = ["Regulation", "Load","Line","Eff"]
+        self.switch_index           = 0
+        self.config                 = {}
 
         self.set_comboBox_sheet(self.comboBox_temp, self.temperature)
 
@@ -235,25 +236,34 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
             wb_data = load_workbook("Measurement data/"+self.timestamp+"/testingdata_"+self.timestamp+".xlsx", data_only=True)
             basicsheet = wb_data["Testing"]
 
-        index_dic = {"Regulation": 4 , "Load": 24, "Line":40, "Eff":57}
+        index_dic = {"Regulation": "D" , "Load": "S", "Line": "AD", "Eff": "AO"}
         sheet_con = 0
         type_name = self.test_item[self.switch_index]
         #print(index_dic[type_name] , type_name)
         col = self.tableWidget_testplan.columnCount()
         row = self.tableWidget_testplan.rowCount()
-        #print(col,row)
+        #logging.debug("Row : %s, Col : %s" % (row, col))
         for row_index in range(row):
-            if row_index > 0:
-                sheet_con += 1
-                #print(sheet_con)
-                logging.debug(str(self.tableWidget_testplan.item(row_index, 0).text()))
-                for col_index in range(col):
+            sheet_con += 1
+            #logging.debug(str(self.tableWidget_testplan.item(row_index, 0).text()))
+            for col_index in range(col):
+                #logging.debug("row_index :%s, col_index : %s" %(row_index, col_index))
+                try:
                     teext = str(self.tableWidget_testplan.item(row_index, col_index).text())
-                    basicsheet.cell(row=((row-1)*self.temperature_index)+(sheet_con+3), column=col_index+index_dic[type_name]).value = teext
+                except Exception as e:
+                    #print(self.tableWidget_testplan.item(row_index, col_index))
+                    teext = ""
+                excel_row_index = ((row) *self.temperature_index) + (sheet_con+2)
+                excel_col_index = col_index + column_index_from_string(index_dic[type_name])
+                basicsheet.cell(row = excel_row_index, column = excel_col_index).value = teext
+
         basicsheet.cell(row=1, column=3).value = self.label_Oc_name_2.text()
         basicsheet.cell(row=2, column=3).value = self.label_PS_name_2.text()
         basicsheet.cell(row=3, column=3).value = self.label_EL_name_2.text()
-        wb_data.save("Measurement data/"+self.timestamp+"/testingdata_"+self.timestamp+".xlsx")
+        try:
+            wb_data.save("Measurement data/"+self.timestamp+"/testingdata_"+self.timestamp+".xlsx")
+        except Exception as e:
+            logging.error("Please close in use, data/"+self.timestamp+"/testingdata_"+self.timestamp+".xlsx ")
 
     def rum_autoreport(self):
         try: 
@@ -288,7 +298,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
                 for j, col in enumerate(row):
                     if str(col) == "None":
                         col = ""
-                    if j == 0 :
+                    ''' if j == 0 :
                         chkBoxItem = QTableWidgetItem(str(col))
                         chkBoxItem.setText(str(col))
                         chkBoxItem.setFlags(QtCore.Qt.ItemIsUserCheckable | QtCore.Qt.ItemIsEnabled)
@@ -296,7 +306,10 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
                         self.tableWidget_testplan.setItem(i-1, j, chkBoxItem)
                     else:    
                         item = QTableWidgetItem(str(col))
-                        self.tableWidget_testplan.setItem(i-1, j, item)
+                        self.tableWidget_testplan.setItem(i-1, j, item)'''
+                    item = QTableWidgetItem(str(col))
+                    item.setText(str(col))
+                    self.tableWidget_testplan.setItem(i-1, j, item)
     
     def load_excel(self, sheet_name):
         sheet = self.wb[sheet_name]
@@ -397,7 +410,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def respones2table(self, msg):
         #print(msg)
-        index_dic = {"Line":11,"Regulation": 14 , "Load": 10,  "Eff":6}
+        index_dic = {"Regulation": 9, "Line":5  , "Load": 5,  "Eff":3}
         index_shift = index_dic[self.test_item[self.switch_index]]
 
         for index, col in enumerate(msg[1]):

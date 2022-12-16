@@ -10,9 +10,9 @@ load_scope = Auto_dc_loding()
 load_scope.PW_VISA_ADDRESS = "GPIB0::5::INSTR"
 load_scope.LD_VISA_ADDRESS = "GPIB0::7::INSTR"
 
-Voltage_1 = 3.7
-Voltage_2 = 4.2
-CurrDynH = "1000mA"
+Voltage_1 = 4.75
+Voltage_2 = 5.25
+CurrDynH = "0.5"
 def L2H():
     # setup Hight level
     load_scope.PW_setup(Voltage_1)
@@ -26,7 +26,7 @@ def L2H():
     auto_scope = Auto_trig()
     auto_scope.VISA_ADDRESS = "USB0::0x0699::0x0405::C022392::INSTR"
     auto_scope.start("Line")
-    auto_scope.Auto_cale(1, 1)
+    auto_scope.Auto_cale(1, 1.5)
     auto_scope.Auto_cale(3, 1)
 
     # Setup Trig level

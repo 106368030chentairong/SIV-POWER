@@ -27,11 +27,15 @@ class get_measure_data():
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
         self.scope.connect()
 
-        time.sleep(5)
+        time.sleep(0.1)
         result_tmp = []
         for i in range(len(self.MEASUrement_Type[:4])):
-            time.sleep(1)
-            value = float(self.scope.do_query('MEASUrement:MEAS'+str(i+1)+':VALue?'))
+            time.sleep(2)
+            try:
+                value = float(self.scope.do_query('MEASUrement:MEAS'+str(i+1)+':VALue?'))
+            except Exception as e:
+                print(e)
+                value = "None"
             result_tmp.append(value)
         
         self.scope.close()

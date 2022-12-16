@@ -25,26 +25,26 @@ class Runthread(QtCore.QThread):
         self.PW_VISA_ADDRESS = None
         self.LD_VISA_ADDRESS = None
 
-        self.testype = None
+        self.testype    = None
         self.excel_data = None
-        self.test_item = {"Regulation":"1", "Load":"2","Line":"3","Eff":"4"}
+        self.test_item  = {"Regulation":"1", "Load":"2","Line":"3","Eff":"4"}
 
         # Spec
-        self.Voltage_1 = None
-        self.Voltage_2 = None
-        self.Imax = None
+        self.Voltage_1  = None
+        self.Voltage_2  = None
+        self.Imax       = None
 
-        self.VMax_Up = None
-        self.VMax_Low = None
-        self.VMin_Up = None
-        self.VMin_Low = None
-        self.VRMS_Up = None
-        self.VRMS_Low = None
-        self.VP2P_Up = None
-        self.VP2P_Low = None
+        self.VMax_Up    = None
+        self.VMax_Low   = None
+        self.VMin_Up    = None
+        self.VMin_Low   = None
+        self.VRMS_Up    = None
+        self.VRMS_Low   = None
+        self.VP2P_Up    = None
+        self.VP2P_Low   = None
 
-        self.CurrDynH = None
-        self.CurrDynL = None
+        self.CurrDynH   = None
+        self.CurrDynL   = None
 
         self.image_index = None
 
@@ -70,65 +70,91 @@ class Runthread(QtCore.QThread):
         
         # Runing to the table row data
         for index, row in enumerate(self.excel_data):
-            # Start in to 2 num row 
-            if index >= 2 :
+            # Start in to 1 num row 
+            if index >= 1 :
                 try:
-                    self.image_index = str(index-1)
+                    self.image_index = str(index)
+                    print(row)
                     self.setup_rel(row)
                     result = self.auto_control(self.testype)
                     self._respones.emit([index,result])
                 except Exception as e:
-                    print(e)
+                    print("Thread lib - run() : (index:%s, row:%s) , %s " %(index, row, e))
                     logging.error(e)
-
-                #result = ["5", "5", "5","5"] #test
-                #if self.testype != "Eff":
-                #    judge = self.judge(result)
-                #    result.append(judge)
-                #time.sleep(1)  #test
-
         time.sleep(5)
         self._stop_signal.emit()
     
     def auto_control(self, testype):
         logging.info("-"*20 + (testype) + "-"*20 )
-        if testype == "Regulation" or testype == "Load":
+        if testype == "Regulation":
             # Auto setup power & loading
             load_scope = Auto_dc_loding()
-            load_scope.PW_VISA_ADDRESS = self.PW_VISA_ADDRESS
-            load_scope.LD_VISA_ADDRESS = self.LD_VISA_ADDRESS
-            load_scope.Voltage   = self.Voltage_1
-            load_scope.Imax      = self.Imax
-            load_scope.CurrDynH  = self.CurrDynH
-            load_scope.CurrDynL  = self.CurrDynL
+            load_scope.PW_VISA_ADDRESS  = self.PW_VISA_ADDRESS
+            load_scope.LD_VISA_ADDRESS  = self.LD_VISA_ADDRESS
+            load_scope.Voltage          = self.Voltage_1
+            load_scope.CurrDynH         = self.CurrDynH
+            load_scope.CurrDynL         = self.CurrDynL
             load_scope.start(testype)
 
             # Auto trig
             auto_scope = Auto_trig()
-            auto_scope.VISA_ADDRESS = self.TK_VISA_ADDRESS
-            auto_scope.normal_scale = self.time_scale
-            auto_scope.display_wavform = self.display_wavform
-            auto_scope.display_graticule = self.display_graticule
-            auto_scope.lineEdit_scale_period = self.lineEdit_scale_period
-            auto_scope.Default_scale = self.Default_scale
-            auto_scope.FFT_image_path = "./Measurement data/%s/%s" %(self.timestamp, "FFT_image")
+            auto_scope.VISA_ADDRESS             = self.TK_VISA_ADDRESS
+            auto_scope.normal_scale             = self.time_scale
+            auto_scope.display_wavform          = self.display_wavform
+            auto_scope.display_graticule        = self.display_graticule
+            auto_scope.input_Voltage            = self.Voltage_1
+            auto_scope.lineEdit_scale_period    = self.lineEdit_scale_period
+            auto_scope.Default_scale            = self.Default_scale
+            auto_scope.FFT_image_path           = "./Measurement data/%s/%s" %(self.timestamp, "FFT_image")
             #auto_scope.config = self.config
             auto_scope.start(testype)
 
-            # set up measure items & get values
+            # Set up measure items & get values
+            measure_scope = get_measure_data()
+            measure_scope.VISA_ADDRESS = self.TK_VISA_ADDRESS
+            measure_scope.add_measurement()
+            result_list = measure_scope.get_value()
+        
+        elif testype == "Load":
+                        # Auto setup power & loading
+            load_scope = Auto_dc_loding()
+            load_scope.PW_VISA_ADDRESS  = self.PW_VISA_ADDRESS
+            load_scope.LD_VISA_ADDRESS  = self.LD_VISA_ADDRESS
+            load_scope.Voltage          = self.Voltage_1
+            load_scope.CurrDynH         = self.CurrDynH
+            load_scope.CurrDynL         = self.CurrDynL
+            load_scope.start(testype)
+
+            # Auto trig
+            auto_scope = Auto_trig()
+            auto_scope.VISA_ADDRESS             = self.TK_VISA_ADDRESS
+            auto_scope.normal_scale             = self.time_scale
+            auto_scope.display_wavform          = self.display_wavform
+            auto_scope.display_graticule        = self.display_graticule
+            auto_scope.input_Voltage            = self.Voltage_1
+            auto_scope.lineEdit_scale_period    = self.lineEdit_scale_period
+            auto_scope.Default_scale            = self.Default_scale
+            auto_scope.FFT_image_path           = "./Measurement data/%s/%s" %(self.timestamp, "FFT_image")
+            #auto_scope.config = self.config
+            auto_scope.setup("10E+3")
+            auto_scope.Auto_cale(1, 3)
+            auto_scope.Auto_cale(2, 1) 
+            auto_scope.Auto_cale(3, 2) 
+            auto_scope.start("Load")
+
+            # Set up measure items & get values
             measure_scope = get_measure_data()
             measure_scope.VISA_ADDRESS = self.TK_VISA_ADDRESS
             measure_scope.add_measurement()
             result_list = measure_scope.get_value()
 
         elif testype == "Line" :
-
-
+            # Setup DC Power supply & Electronic Loading 
             load_scope = Auto_dc_loding()
             load_scope.PW_VISA_ADDRESS = self.PW_VISA_ADDRESS
             load_scope.LD_VISA_ADDRESS = self.LD_VISA_ADDRESS
 
-            # setup Hight level
+            # Setup Hight level
             load_scope.PW_setup(self.Voltage_1)
 
             # Setup loading Curr
@@ -138,7 +164,7 @@ class Runthread(QtCore.QThread):
             auto_scope = Auto_trig()
             auto_scope.VISA_ADDRESS = self.TK_VISA_ADDRESS
             auto_scope.start("Line")
-            auto_scope.Auto_cale(1, 1) 
+            auto_scope.Auto_cale(1, 1.5) 
             auto_scope.Auto_cale(3, 1)
 
             '''if float(self.Voltage_1) > float(self.Voltage_2) :
@@ -187,62 +213,47 @@ class Runthread(QtCore.QThread):
             result_list = load_scope.get_Eff()
 
         if self.testype != "Eff":
+            print("result_list: %s" % result_list)
             judge = self.judge(result_list)
+            print("judge: %s" % judge)
             result_list.append(judge)
             #auto_scope.get_IMAGe("./Measurement data/"+self.timestamp+"/"+ self.test_item[testype] +"_"+ str(self.temperature_index) +"_"+ self.image_index )
             #logging.info("./Measurement data/"+self.timestamp+"/"+ self.test_item[testype] +"_"+ str(self.temperature_index) +"_"+ self.image_index )
-            auto_scope.get_IMAGe("./Measurement data/%s/%s_%s_%s" %(self.timestamp,self.test_item[testype],self.temperature_index,self.image_index))
-            logging.info("./Measurement data/%s/%s_%s_%s" %(self.timestamp,self.test_item[testype],self.temperature_index,self.image_index))
+            auto_scope.get_IMAGe("./Measurement data/%s/%s_%s_%s" %(self.timestamp, self.test_item[testype], self.temperature_index, self.image_index))
+            logging.info("./Measurement data/%s/%s_%s_%s" %(self.timestamp, self.test_item[testype], self.temperature_index, self.image_index))
         return result_list
 
     def setup_rel(self, rowdata):
         if self.testype == "Regulation":
-            self.Voltage_1  = rowdata[2]
-            self.Imax       = rowdata[3]
+            self.Voltage_1  = str(rowdata[1]).split("/")[0]
+            self.CurrDynH   = rowdata[2]
 
-            self.VMax_Up    = rowdata[4]
-            self.VMax_Low   = rowdata[5]
-            self.VMin_Up    = rowdata[6]
-            self.VMin_Low   = rowdata[7]
-            self.VRMS_Up    = rowdata[8]
-            self.VRMS_Low   = rowdata[9]
-            self.VP2P_Up    = rowdata[10]
-            self.VP2P_Low   = rowdata[11]
-
-            self.CurrDynH   = rowdata[12]
-            self.CurrDynL   = rowdata[13]
+            self.VMax_Up    = rowdata[3]
+            self.VMin_Low   = rowdata[4]
+            self.VRMS_Up    = rowdata[6]
+            self.VRMS_Low   = rowdata[7]
+            self.VP2P_Up    = rowdata[8]
+            self.VP2P_Low   = rowdata[9]
 
         elif self.testype == "Load":
-            self.Voltage_1  = rowdata[2]
-            self.Imax       = rowdata[3]
+            self.Voltage_1  = str(rowdata[1]).split("/")[0]
+            self.CurrDynH   = str(rowdata[2]).split("/")[0]
+            self.CurrDynL   = str(rowdata[2]).split("/")[1]
 
-            self.VMax_Up    = rowdata[4]
-            self.VMax_Low   = rowdata[5]
-            self.VMin_Up    = rowdata[6]
-            self.VMin_Low   = rowdata[7]
-
-            self.CurrDynH   = rowdata[8]
-            self.CurrDynL   = rowdata[9]
+            self.VMax_Up    = rowdata[3]
+            self.VMin_Low   = rowdata[4]
         
         elif self.testype == "Line":
-            self.Voltage_1  = rowdata[2]
-            self.Voltage_2  = rowdata[3]
-            self.Imax       = rowdata[4]
+            self.Voltage_1  = str(rowdata[1]).split("/")[0]
+            self.Voltage_2  = str(rowdata[1]).split("/")[1]
+            self.CurrDynH   = str(rowdata[2]).split("/")[0]
 
-            self.VMax_Up    = rowdata[5]
-            self.VMax_Low   = rowdata[6]
-            self.VMin_Up    = rowdata[7]
-            self.VMin_Low   = rowdata[8]
-
-            self.CurrDynH   = rowdata[9]
-            self.CurrDynL   = rowdata[10]
+            self.VMax_Up    = rowdata[3]
+            self.VMin_Low   = rowdata[4]
         
         elif self.testype == "Eff":
-            self.Voltage_1  = rowdata[2]
-            self.Imax       = rowdata[3]
-
-            self.CurrDynH   = rowdata[4]
-            self.CurrDynL   = rowdata[5]
+            self.Voltage_1  = rowdata[1]
+            self.CurrDynH   = rowdata[2]
 
     def judge(self, result_list ):
         Max_value = result_list[0]
@@ -251,18 +262,18 @@ class Runthread(QtCore.QThread):
         PK2PK_value = result_list[3]
 
         Judge_num = 0
-        if self.VMax_Up != self.VMax_Low:
+        if self.VMax_Up != self.VMin_Low:
             if float(Max_value) > float(self.VMax_Up):
                 Judge_num += 1
-            if float(Max_value) < float(self.VMax_Low):
+            if float(Max_value) < float(self.VMin_Low):
                 Judge_num += 1    
         
-        if self.VMin_Up != self.VMin_Low:
-            if float(Min_value) > float(self.VMin_Up):
+        if self.VMin_Low != self.VMin_Low:
+            if float(Min_value) > float(self.VMax_Up):
                 Judge_num += 1
             if float(Min_value) < float(self.VMin_Low):
                 Judge_num += 1    
-
+        '''
         if self.VRMS_Up != self.VRMS_Low:
             if float(RMS_value) > float(self.VRMS_Up):
                 Judge_num += 1
@@ -273,13 +284,12 @@ class Runthread(QtCore.QThread):
             if float(PK2PK_value) > float(self.VP2P_Up):
                 Judge_num += 1
             if float(PK2PK_value) < float(self.VP2P_Low):
-                Judge_num += 1
+                Judge_num += 1'''
         
         if Judge_num > 0:
             return "FALL"
         else:
             return "PASS"    
-
 
     def stop(self):
         time.sleep(1)

@@ -26,6 +26,8 @@ class Auto_trig():
         self.frequency = 0
         self.check_frq_num = 0
         self.check_trig_num = 0
+
+        self.input_Voltage = 5
         self.Output_Voltage = 20
 
         self.display_wavform = 99
@@ -77,10 +79,11 @@ class Auto_trig():
         self.scope.do_command('HORizontal:RECOrdlength '+ str(record_length))
         self.scope.do_command('FPAnel:PRESS MENUOff')
         self.scope.do_command('SELECT:CH1 ON')
-        self.scope.do_command('SELECT:CH2 OFF')
+        self.scope.do_command('SELECT:CH2 ON')
         self.scope.do_command('SELECT:CH3 ON')
         self.scope.do_command('SELECT:CH3 ON')
         self.scope.do_command('HORizontal:SAMPLERate 100e6')
+        self.scope.do_command('HORIZONTAL:SCALE ' + self.normal_scale)
         #Default settings for CH
         self.scope.do_command('CH1:POSition -2') #Default position is CH1
         self.scope.do_command('CH3:POSition -2') #Default position is CH3
@@ -88,6 +91,7 @@ class Auto_trig():
         self.scope.do_command('CH1:SCAle 2') #Default value for voltage
         self.scope.do_command('CH3:SCALe 1') #Default value for current
         self.scope.do_command('CH3:PRObe:FORCEDRange 5')
+        
         self.scope.close()
 
     def set_scale(self, scale):
@@ -96,6 +100,7 @@ class Auto_trig():
         self.scope.connect()
         self.scope.do_command('HORIZONTAL:SCALE '+str(scale))
         self.scope.do_command('acquire:state ON')
+        self.check_trig_num = 0
         self.check_single_state() # check while loop
         self.scope.close()
 
@@ -189,12 +194,8 @@ class Auto_trig():
             Scale_value = CH1_AMPlitude_VALue/div_num
             print(Scale_value)
             #self.scope.do_command('CH%s:BANdwidth 20E+6' %(channel))
-            if channel != 3 :
-                self.scope.do_command('CH%s:OFFSet %s' %(channel,offset_value))
-                self.scope.do_command('CH%s:SCAle %s' %(channel,Scale_value))
-            else:
-                self.scope.do_command('CH%s:OFFSet %s' %(channel,offset_value))
-                self.scope.do_command('CH%s:SCAle %s' %(channel,div_num))
+            self.scope.do_command('CH%s:OFFSet %s' %(channel,offset_value))
+            self.scope.do_command('CH%s:SCAle %s' %(channel,Scale_value))
 
             print("OffSet：{}, Scale：{}".format(offset_value, Scale_value))
 
@@ -211,7 +212,7 @@ class Auto_trig():
         self.scope.do_command('AUTOSet EXECute')
         time.sleep(2)
         self.scope.do_command('CH'+str(channel)+':BANdwidth 20E+6')
-        self.scope.do_command('CH3:PRObe:FORCEDRange 5') 
+        self.scope.do_command('CH3:PRObe:FORCEDRange 5') # Set Channel 3 to 5A range
         ##self.scope.do_command('CH1:OFFSet 0')
         ##self.scope.do_command('CH1:SCAle 2')
         self.scope.do_command('HORIZONTAL:SCALE '+str(scale))
@@ -404,16 +405,37 @@ class Auto_trig():
             thread.main()
 
         elif testype == "Load":
-            self.VISA_ADDRESS = self.VISA_ADDRESS
-            #self.scope.do_command('ACQuire:STOPAfter SEQuence')
-            #self.scope.do_command('acquire:state ON')
-            self.setup("1E+6")
-            self.set_measurement()
-            Volts, Time = self.get_rawdata( 1, "1E-3")
-            #self.scope.do_command('HORIZONTAL:SCALE 0.5')
-            #self.scope.do_command('acquire:state ON')
-            #self.check_single_state() # check while loop
-        
+            #self.setup("20E+6")
+            #self.set_measurement()
+            #self.get_rawdata( 1, "1E-3")
+
+            self.scope = DPO4000_visa()
+            self.scope.VISA_ADDRESS = self.VISA_ADDRESS
+            self.scope.connect()
+            #self.scope.do_command('FPAnel:PRESS DEFaultsetup')
+            #self.scope.do_command('FPAnel:PRESS MENUOff')
+            #self.scope.do_command('CH3:PRObe:FORCEDRange 5')
+            
+            #self.scope.do_command('DISplay:INTENSITy:WAVEform '+str(self.display_wavform))
+            #self.scope.do_command('DISplay:INTENSITy:GRAticule '+str(self.display_graticule))
+            self.scope.do_command('HORizontal:RECOrdlength 1E+6')
+
+            #self.scope.do_command('AUTOSet EXECute')
+            self.scope.do_command('acquire:state ON')
+            self.check_trig_num = 0
+            self.check_single_state() # check while loop
+
+            self.scope.do_command('SELECT:CH1 ON')
+            self.scope.do_command('SELECT:CH2 OFF')
+            self.scope.do_command('SELECT:CH3 ON')
+            self.scope.do_command('SELECT:CH4 OFF')
+
+            self.scope.do_command('CH1:POSition 2') #Default position is CH1
+            self.scope.do_command('CH3:POSition -2') #Default position is CH3
+
+            time.sleep(2)
+            self.scope.close()
+
         elif testype == "Line":
             self.setup("1E+6")
 

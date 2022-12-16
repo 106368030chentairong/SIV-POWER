@@ -3,13 +3,13 @@ import logging
 
 class Auto_dc_loding():
     def __init__(self):
+        # Visa function settings
         self.PW_VISA_ADDRESS = None
         self.LD_VISA_ADDRESS = None
         self.scope = None
 
+        # Measurement values settings 
         self.Voltage = None
-
-        self.Imax = None
         self.CurrDynH = None
         self.CurrDynL = None
 
@@ -42,6 +42,7 @@ class Auto_dc_loding():
                 "CURR:DYN:L1 "+str(self.CurrDynH), "CURR:DYN:L2 "+str(self.CurrDynL),
                 "CURR:DYN:RISE 0.25", "CURR:DYN:FALL 0.25",
                 "CURR:DYN:T1 0.5E-3", "CURR:DYN:T2 0.5E-3"]
+                
         # CCDL RISE:250mA/us FALL 250mA/us T1:0.5ms T2:0.5ms
         for cmd in cmd_list :
             self.scope.do_command(cmd)
