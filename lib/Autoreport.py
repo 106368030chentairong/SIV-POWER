@@ -14,7 +14,8 @@ class Autoreport_Runthread(QtCore.QThread):
     _progressBar = pyqtSignal(str)
     def __init__(self):
         super(Autoreport_Runthread, self).__init__()
-        self.timestamp = None
+        self.excle_path = None
+        self.folder_path = None
 
         self.Templatepath = None
         self.testplan_path = None
@@ -27,7 +28,9 @@ class Autoreport_Runthread(QtCore.QThread):
     
     def EXCEL2WORD(self, sheetname):
 
-        wb_data = load_workbook("./Measurement data/"+self.timestamp+'/testingdata_'+self.timestamp+'.xlsx', data_only=True)
+        #wb_data = load_workbook('./Measurement data/'+self.timestamp+'/testingdata_'+self.timestamp+'.xlsx', data_only=True)
+        wb_data = load_workbook(self.excle_path, data_only=True)
+
         sheet_data = wb_data[sheetname]
         wb_data.close()
 
@@ -36,6 +39,9 @@ class Autoreport_Runthread(QtCore.QThread):
                 cell_value = sheet_data[Tag.split('_')[-1]].internal_value
                 if cell_value == 'None':
                     cell_value = ""
+                if cell_value == None:
+                    cell_value = ""
+
                 self.context.setdefault(Tag ,cell_value)
             '''
             if Tag.split('_')[0] == "JG":
@@ -54,12 +60,12 @@ class Autoreport_Runthread(QtCore.QThread):
 
         logging.info("Report Path : ./"+self.format_save_name(sheet_data))
         #print(sheet_data)
-        self.doc.save("./Measurement data/"+self.timestamp+"/"+self.format_save_name(sheet_data))     
+        self.doc.save(self.folder_path+"/"+self.format_save_name(sheet_data))     
     
     def IMG2WORD(self):
         tmp = []
         image_counter = 0
-        for index_dir, (dirPath, dirNames, fileNames) in enumerate(os.walk("./Measurement data/"+self.timestamp+"/")):
+        for index_dir, (dirPath, dirNames, fileNames) in enumerate(os.walk(self.folder_path+"/")):
             #if dirNames != []:
             #    for index, f in enumerate(fileNames):
             #        print((dirPath, dirNames, fileNames))
@@ -107,6 +113,9 @@ class Autoreport_Runthread(QtCore.QThread):
     def run(self):
         self.context = {}
         self.doc = DocxTemplate(self.Templatepath)
+        path_tmp = self.excle_path.split("/")
+        path_tmp.pop()
+        self.folder_path = ("/").join(path_tmp)
         self.IMG2WORD()
         self.EXCEL2WORD("Testing")
     

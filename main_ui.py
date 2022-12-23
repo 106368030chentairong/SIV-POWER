@@ -58,9 +58,11 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.pushButton_testplan.clicked.connect(self.open_testplan)
         self.pushButton_template.clicked.connect(self.open_template)
+        self.pushButton_MD.clicked.connect(self.open_Measurement_data)
 
         self.pushButton_open_upload.clicked.connect(self.open_uploadfile)
 
+        self.pushButton_GR.clicked.connect(self.rum_autoreport)
         self.pushButton_RUN.clicked.connect(self.btn_run)
         self.pushButton_Cancel.clicked.connect(self.thread_stop)
         #self.pushButton_Cancel.clicked.connect(self.close)
@@ -179,6 +181,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         if self.temperature_index == 0:
             self.setup_timestamp()
             self.check_folder()
+            self.lineEdit_MD.setText("./Measurement data/"+self.timestamp+'/testingdata_'+self.timestamp+'.xlsx')
         self.switch_index = 0
         self.statusBar.showMessage('Load excel : {}'.format(self.test_item[0]))
         self.load_excel(self.test_item[0])
@@ -268,7 +271,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
     def rum_autoreport(self):
         try: 
             self.thread_autoreport = Autoreport_Runthread()
-            self.thread_autoreport.timestamp = self.timestamp
+            self.thread_autoreport.excle_path = self.lineEdit_MD.text()
             self.thread_autoreport.Templatepath = self.lineEdit_template.text()
             self.thread_autoreport.testplan_path = self.lineEdit_testplan.text()
             self.thread_autoreport.start()
@@ -362,6 +365,15 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         except Exception as e:
             print(e)
             logging.error("Open Word File Error ! ")
+    
+    def open_Measurement_data(self):
+        try:
+            filename, filetype = QFileDialog.getOpenFileName(self, "Open file", "./", "Excel (*.xlsx)")
+            if filename != "":
+                self.lineEdit_MD.setText(filename)
+        except Exception as e:
+            print(e)
+            logging.error("Open Excel File Error ! ")
 
     def open_uploadfile(self):
         try:

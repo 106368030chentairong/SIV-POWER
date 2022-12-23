@@ -108,6 +108,7 @@ class Runthread(QtCore.QThread):
             auto_scope.FFT_image_path           = "./Measurement data/%s/%s" %(self.timestamp, "FFT_image")
             #auto_scope.config = self.config
             auto_scope.start(testype)
+            auto_scope.Auto_cale(3, 2)
 
             # Set up measure items & get values
             measure_scope = get_measure_data()

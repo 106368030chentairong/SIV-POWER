@@ -165,10 +165,7 @@ class Auto_trig():
         self.scope.VISA_ADDRESS = self.VISA_ADDRESS
         self.scope.connect()
 
-        self.scope.do_command('SELECT:CH1 ON')
-        self.scope.do_command('SELECT:CH2 ON')
-        self.scope.do_command('SELECT:CH3 ON')
-        self.scope.do_command('SELECT:CH3 ON')
+        self.scope.do_command('SELECT:CH%s ON' %(channel))
 
         channel_list = [channel,channel,channel,channel]
         MEASUrement_Type = ["MAXimum","MINImum","MEAN","pk2pk"]
