@@ -169,7 +169,7 @@ class Runthread(QtCore.QThread):
             auto_scope.Auto_cale(3, 1)
 
             '''if float(self.Voltage_1) > float(self.Voltage_2) :
-                SLOpe = "FALL"
+                SLOpe = "FAIL"
             else:
                 SLOpe = "RISe"'''
             #trig_votage = ((float(self.Voltage_1) - float(self.Voltage_2))/2 ) + float(self.Voltage_2)
@@ -179,7 +179,7 @@ class Runthread(QtCore.QThread):
             # Setup Trig level
             #logging.info(SLOpe)
             #logging.info("trig votage :"+ str(trig_votage))
-            #auto_scope.setup_trig(str(trig_votage) , SLOpe) #  {RISe|FALL}
+            #auto_scope.setup_trig(str(trig_votage) , SLOpe) #  {RISe|FAIL}
             auto_scope.setup_trig(float(self.Voltage_1), float(self.Voltage_2))
             # setup Low level
             time.sleep(2)
@@ -288,7 +288,7 @@ class Runthread(QtCore.QThread):
                 Judge_num += 1'''
         
         if Judge_num > 0:
-            return "FALL"
+            return "FAIL"
         else:
             return "PASS"    
 

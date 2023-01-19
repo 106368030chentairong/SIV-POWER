@@ -96,19 +96,19 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
             "Display wavfrom": self.SB_display_wavform.value(),
             "Display graticule": self.SB_display_graticule.value(),
             "Channel 1":{
-                    "Voltage Scale":self.DSB_V_Scale_CH1.value(),
-                    "OFFSet":self.DSB_offset_CH1.value(),
-                    "Position":self.DSB_postion_CH1.value()
+                    "Voltage Scale" : self.DSB_V_Scale_CH1.value(),
+                    "OFFSet"        : self.DSB_offset_CH1.value(),
+                    "Position"      : self.DSB_postion_CH1.value()
                 },
             "Channel 2":{
-                    "Voltage Scale":self.DSB_V_Scale_CH2.value(),
-                    "OFFSet":self.DSB_offset_CH2.value(),
-                    "Position":self.DSB_postion_CH2.value()
+                    "Voltage Scale" : self.DSB_V_Scale_CH2.value(),
+                    "OFFSet"        : self.DSB_offset_CH2.value(),
+                    "Position"      : self.DSB_postion_CH2.value()
                 },
             "Channel 3":{
-                    "Voltage Scale":self.DSB_V_Scale_CH3.value(),
-                    "OFFSet":self.DSB_offset_CH3.value(),
-                    "Position":self.DSB_postion_CH3.value()
+                    "Voltage Scale" : self.DSB_V_Scale_CH3.value(),
+                    "OFFSet"        : self.DSB_offset_CH3.value(),
+                    "Position"      : self.DSB_postion_CH3.value()
                 }
         }
 
@@ -194,14 +194,14 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread.TK_VISA_ADDRESS = self.comboBox_TK_visa.currentText()
         self.thread.PW_VISA_ADDRESS = self.comboBox_PS_visa.currentText()
         self.thread.LD_VISA_ADDRESS = self.comboBox_EL_visa.currentText()
-        self.thread.time_scale = self.lineEdit_time_scale.text()
+        self.thread.time_scale      = self.lineEdit_time_scale.text()
         self.thread.display_wavform = self.SB_display_wavform.value()
-        self.thread.display_graticule = self.SB_display_graticule.value()
+        self.thread.display_graticule     = self.SB_display_graticule.value()
         self.thread.lineEdit_scale_period = self.lineEdit_scale_period.text()
-        self.thread.Default_scale = self.lineEdit_FFT_scale.text()
+        self.thread.Default_scale   = self.lineEdit_FFT_scale.text()
         #self.thread.config = self.config
-        self.thread.excel_data = self.excel_data
-        self.thread.timestamp = self.timestamp
+        self.thread.excel_data      = self.excel_data
+        self.thread.timestamp       = self.timestamp
         self.thread.temperature_index = self.temperature_index
         self.thread._respones.connect(self.respones2table)
         self.thread._device_info.connect(self.set_device_info)
@@ -436,6 +436,9 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
 
 if __name__ == "__main__":
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling)
+    QApplication.setAttribute(QtCore.Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+
     app = QtWidgets.QApplication(sys.argv)
     AutoRepor = mainProgram()
     AutoRepor.show()
