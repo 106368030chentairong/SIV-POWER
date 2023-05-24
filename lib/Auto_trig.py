@@ -37,6 +37,8 @@ class Auto_trig():
         self.Default_scale = None
         self.FFT_image_path = None
 
+        self.CurrDynH = None
+
     def check_stack_dif(self):
         max_index = 0
         mini_index = 0
@@ -345,6 +347,9 @@ class Auto_trig():
         self.scope.do_command('SELECT:CH1 ON')
         self.scope.do_command('SELECT:CH2 ON')
         self.scope.do_command('SELECT:CH3 ON')
+        self.scope.do_command('CH1:BANdwidth 20E+6')
+        self.scope.do_command('CH2:BANdwidth 20E+6')
+        self.scope.do_command('CH3:BANdwidth 20E+6')
         self.scope.do_command('CH1:POSition 2')
         self.scope.do_command('CH2:POSition 0')
         self.scope.do_command('CH3:POSition -3')
@@ -402,19 +407,9 @@ class Auto_trig():
             thread.main()
 
         elif testype == "Load":
-            #self.setup("20E+6")
-            #self.set_measurement()
-            #self.get_rawdata( 1, "1E-3")
-
             self.scope = DPO4000_visa()
             self.scope.VISA_ADDRESS = self.VISA_ADDRESS
             self.scope.connect()
-            #self.scope.do_command('FPAnel:PRESS DEFaultsetup')
-            #self.scope.do_command('FPAnel:PRESS MENUOff')
-            #self.scope.do_command('CH3:PRObe:FORCEDRange 5')
-            
-            #self.scope.do_command('DISplay:INTENSITy:WAVEform '+str(self.display_wavform))
-            #self.scope.do_command('DISplay:INTENSITy:GRAticule '+str(self.display_graticule))
             self.scope.do_command('HORizontal:RECOrdlength 1E+6')
 
             #self.scope.do_command('AUTOSet EXECute')
@@ -426,6 +421,9 @@ class Auto_trig():
             self.scope.do_command('SELECT:CH2 OFF')
             self.scope.do_command('SELECT:CH3 ON')
             self.scope.do_command('SELECT:CH4 OFF')
+
+            self.scope.do_command('CH1:BANdwidth 20E+6')
+            self.scope.do_command('CH3:BANdwidth 20E+6')
 
             self.scope.do_command('CH1:POSition 2') #Default position is CH1
             self.scope.do_command('CH3:POSition -2') #Default position is CH3
@@ -448,7 +446,14 @@ class Auto_trig():
             self.scope.do_command('DISplay:INTENSITy:GRAticule '+str(self.display_graticule))
             self.scope.do_command('HORizontal:RECOrdlength 10E+3')
 
+            self.scope.do_command('CH1:BANdwidth 20E+6')
+            self.scope.do_command('CH2:BANdwidth 20E+6')
+            self.scope.do_command('CH3:BANdwidth 20E+6')
+
             self.scope.do_command('AUTOSet EXECute')
+
+            self.scope.do_command('CH3:OFFSet %s' %(self.CurrDynH))
+            self.scope.do_command('CH3:SCAle %s' %(0.1))
             time.sleep(2)
 
             self.scope.close()

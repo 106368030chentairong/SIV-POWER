@@ -128,17 +128,17 @@ class Runthread(QtCore.QThread):
 
             # Auto trig
             auto_scope = Auto_trig()
-            auto_scope.VISA_ADDRESS             = self.TK_VISA_ADDRESS
-            auto_scope.normal_scale             = self.time_scale
-            auto_scope.display_wavform          = self.display_wavform
-            auto_scope.display_graticule        = self.display_graticule
-            auto_scope.input_Voltage            = self.Voltage_1
-            auto_scope.lineEdit_scale_period    = self.lineEdit_scale_period
-            auto_scope.Default_scale            = self.Default_scale
-            auto_scope.FFT_image_path           = "./Measurement data/%s/%s" %(self.timestamp, "FFT_image")
+            auto_scope.VISA_ADDRESS           = self.TK_VISA_ADDRESS
+            auto_scope.normal_scale           = self.time_scale
+            auto_scope.display_wavform        = self.display_wavform
+            auto_scope.display_graticule      = self.display_graticule
+            auto_scope.input_Voltage          = self.Voltage_1
+            auto_scope.lineEdit_scale_period  = self.lineEdit_scale_period
+            auto_scope.Default_scale          = self.Default_scale
+            auto_scope.FFT_image_path         = "./Measurement data/%s/%s" %(self.timestamp, "FFT_image")
             #auto_scope.config = self.config
             auto_scope.setup("10E+3")
-            auto_scope.Auto_cale(1, 3)
+            auto_scope.Auto_cale(1, 2)
             auto_scope.Auto_cale(2, 1) 
             auto_scope.Auto_cale(3, 2) 
             auto_scope.start("Load")
@@ -164,9 +164,10 @@ class Runthread(QtCore.QThread):
 
             auto_scope = Auto_trig()
             auto_scope.VISA_ADDRESS = self.TK_VISA_ADDRESS
+            auto_scope.CurrDynH  = self.CurrDynH
             auto_scope.start("Line")
-            auto_scope.Auto_cale(1, 1.5) 
-            auto_scope.Auto_cale(3, 1)
+            auto_scope.Auto_cale(1, 1)
+            #auto_scope.Auto_cale(3, 1)
 
             '''if float(self.Voltage_1) > float(self.Voltage_2) :
                 SLOpe = "FAIL"

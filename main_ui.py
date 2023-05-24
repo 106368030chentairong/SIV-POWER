@@ -27,6 +27,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self, parent=None):
         super(mainProgram, self).__init__(parent)
         self.setupUi(self)
+        self.setWindowTitle("Auto Power test V0.1.9")
         self.UI_default_setup()
 
         self.timestamp          = None
@@ -178,7 +179,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def btn_run(self):
         self.temperature_index = self.temperature_index_list[self.comboBox_temp.currentText()]
-        if self.temperature_index == 0:
+        if self.temperature_index == 0 or self.lineEdit_MD.text() == "":
             self.setup_timestamp()
             self.check_folder()
             self.lineEdit_MD.setText("./Measurement data/"+self.timestamp+'/testingdata_'+self.timestamp+'.xlsx')

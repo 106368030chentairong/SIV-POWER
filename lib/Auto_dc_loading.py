@@ -46,7 +46,7 @@ class Auto_dc_loding():
         # CCDL RISE:250mA/us FALL 250mA/us T1:0.5ms T2:0.5ms
         for cmd in cmd_list :
             self.scope.do_command(cmd)
-    
+
         self.scope.do_command("LOAD ON")
         self.scope.close()
     

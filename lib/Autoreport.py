@@ -76,7 +76,7 @@ class Autoreport_Runthread(QtCore.QThread):
             for Tag in self.doc.get_undeclared_template_variables():
                 if Tag.split('_')[0] == "image":
                     try:
-                        f = fileNames[int(Tag.split('_')[-1])]
+                        f = fileNames[int(Tag.split('_')[-1])-1]
                         if f.split(".")[-1] == "png":
                             self.context.setdefault(Tag, InlineImage(self.doc, os.path.join(dirPath, f),width=Mm(int(80))))
                     except Exception:

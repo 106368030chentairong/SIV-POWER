@@ -33,6 +33,8 @@ class get_measure_data():
             time.sleep(2)
             try:
                 value = float(self.scope.do_query('MEASUrement:MEAS'+str(i+1)+':VALue?'))
+                if i == 3:
+                    value = value * 1E+3
             except Exception as e:
                 print(e)
                 value = "None"
